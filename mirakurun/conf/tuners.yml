@@ -1,0 +1,29 @@
+# PLEX PX-W3U4向けの設定です
+# お使いのチューナーに合わせて変更してください
+
+  - name: 'PLEX PX-W3U4 (Terrestrial) #1'
+    types:
+      - GR
+    command: recpt1 --device /dev/px4video2 <channel> - -
+    decoder: arib-b25-stream-test
+    isDisabled: false
+  - name: 'PLEX PX-W3U4 (Terrestrial) #2'
+    types:
+      - GR
+    command: recpt1 --device /dev/px4video3 <channel> - -
+    decoder: arib-b25-stream-test
+    isDisabled: false
+  - name: 'PLEX PX-W3U4 (Satellite) #1'
+    types:
+      - BS
+      - CS
+    command: recpt1 --device /dev/px4video0 <channel> - -
+    decoder: arib-b25-stream-test
+    isDisabled: false
+  - name: 'PLEX PX-W3U4 (Satellite) #2'
+    types:
+      - BS
+      - CS
+    command: recpt1 --device /dev/px4video1 <channel> - -
+    decoder: arib-b25-stream-test
+    isDisabled: false

@@ -1,0 +1,91 @@
+# 東京地区向けの設定です
+# お住まいの地域に合わせて変更してください
+
+  - name: TOKYO MX
+    type: GR
+    channel: '16'
+    isDisabled: false
+  - name: tvk
+    type: GR
+    channel: '18'
+    isDisabled: false
+  - name: フジテレビジョン
+    type: GR
+    channel: '21'
+    isDisabled: false
+  - name: TBS
+    type: GR
+    channel: '22'
+    isDisabled: false
+  - name: テレビ東京
+    type: GR
+    channel: '23'
+    isDisabled: false
+  - name: テレビ朝日
+    type: GR
+    channel: '24'
+    isDisabled: false
+  - name: 日本テレビ
+    type: GR
+    channel: '25'
+    isDisabled: false
+  - name: NHKEテレ東京
+    type: GR
+    channel: '26'
+    isDisabled: false
+  - name: NHK総合・東京
+    type: GR
+    channel: '27'
+    isDisabled: false
+  - name: TBS
+    type: GR
+    channel: '45'
+    isDisabled: false
+  - name: BS01/TS0
+    type: BS
+    channel: BS01_0
+    isDisabled: false
+  - name: BS01/TS1
+    type: BS
+    channel: BS01_1
+    isDisabled: false
+  - name: BS01/TS2
+    type: BS
+    channel: BS01_2
+    isDisabled: false
+  - name: BS09/TS0
+    type: BS
+    channel: BS09_0
+    isDisabled: false
+  - name: BS09/TS2
+    type: BS
+    channel: BS09_2
+    isDisabled: false
+  - name: BS13/TS0
+    type: BS
+    channel: BS13_0
+    isDisabled: false
+  - name: BS13/TS1
+    type: BS
+    channel: BS13_1
+    isDisabled: false
+  - name: BS13/TS2
+    type: BS
+    channel: BS13_2
+    isDisabled: false
+  - name: BS15/TS0
+    type: BS
+    channel: BS15_0
+    isDisabled: false
+  - name: BS15/TS2
+    type: BS
+    channel: BS15_2
+    isDisabled: false
+  - name: BS23/TS1
+    type: BS
+    channel: BS23_1
+    isDisabled: false
+  - name: BS23/TS3
+    type: BS
+    channel: BS23_3
+    isDisabled: false

@@ -1,0 +1,66 @@
+services:
+  mirakurun:
+    image: mirakurun
+    container_name: Mirakurun
+    build:
+      context: ./mirakurun
+    cap_add:
+      - SYS_ADMIN
+      - SYS_NICE
+    ports:
+      - "40772:40772"
+      - "9229:9229"
+    volumes:
+      - ./mirakurun/conf:/app-config
+      - ./mirakurun/data:/app-data
+    environment:
+      TZ: "Asia/Tokyo"
+    devices:
+      - /dev/bus:/dev/bus
+      - /dev/px4video0:/dev/px4video0
+      - /dev/px4video1:/dev/px4video1
+      - /dev/px4video2:/dev/px4video2
+      - /dev/px4video3:/dev/px4video3
+    restart: always
+    logging:
+      driver: json-file
+      options:
+        max-file: "1"
+        max-size: 10m
+
+  edcb:
+    image: edcb
+    container_name: EDCB
+    build:
+      context: ./EDCB
+    depends_on:
+      - mirakurun
+    restart: always
+    network_mode: host
+    privileged: true
+
+  konomitv:
+    image: konomitv
+    container_name: KonomiTV
+    build:
+      context: ./KonomiTV
+    depends_on:
+      - mirakurun
+      - edcb
+    restart: always
+    network_mode: host
+    volumes:
+      - type: bind
+        source: './KonomiTV/config.yaml'
+        target: '/code/config.yaml'
+      - type: bind
+        source: './KonomiTV/server/data/'
+        target: '/code/server/data/'
+      - type: bind
+        source: './KonomiTV/server/logs/'
+        target: '/code/server/logs/'
+      - type: bind
+        source: '/'
+        target: '/host-rootfs/'
+    devices:
+      - '/dev/dri/:/dev/dri/'
