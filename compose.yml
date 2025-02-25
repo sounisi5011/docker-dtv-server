@@ -28,16 +28,32 @@ services:
         max-file: "1"
         max-size: 10m
 
+  edcb_chscan:
+    image: edcb
+    container_name: EDCB_ChScan
+    build:
+      context: ./EDCB
+    depends_on:
+      - mirakurun
+    network_mode: host
+    volumes:
+      - edcb:/var/local/edcb
+
   edcb:
     image: edcb
     container_name: EDCB
     build:
       context: ./EDCB
     depends_on:
-      - mirakurun
+      mirakurun:
+        condition: service_started
+      edcb_chscan:
+        condition: service_completed_successfully
     restart: always
     network_mode: host
-    privileged: true
+    command: /usr/local/bin/EpgTimerSrv
+    volumes:
+      - edcb:/var/local/edcb
 
   konomitv:
     image: konomitv
@@ -64,3 +80,6 @@ services:
         target: '/host-rootfs/'
     devices:
       - '/dev/dri/:/dev/dri/'
+
+volumes:
+  edcb:
