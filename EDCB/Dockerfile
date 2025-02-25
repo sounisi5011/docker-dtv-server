@@ -26,6 +26,18 @@ RUN sed -i -e 's/^ALLOW_SETTING=.*/ALLOW_SETTING=true/' \
     /var/local/edcb/HttpPublic/legacy/util.lua
 RUN <<EOF
 cat <<EOF2 >> /var/local/edcb/EpgTimerSrv.ini
+EnableTCPSrv=1
+TCPIPv6=0
+TCPPort=4510
+TCPAccessControlList=+127.0.0.1,+192.168.0.0/16
+TCPResponseTimeoutSec=120
+EpgArchivePeriodHour=0
+SaveNotifyLog=0
+SaveDebugLog=0
+TimeSync=0
+AutoDelRecInfo=0
+AutoDelRecInfoNum=100
+TSExt=.ts
 [TVTEST]
 Num=1
 0=BonDriver_LinuxMirakc.so
@@ -34,6 +46,14 @@ Count=4
 GetEpg=2
 EPGCount=2
 Priority=0
+EOF2
+EOF
+RUN <<EOF
+cat <<EOF2 >> /var/local/edcb/EpgDataCap_Bon.ini
+[SET_TCP]
+IP0=1
+Port0=0
+Count=1
 EOF2
 EOF
 
