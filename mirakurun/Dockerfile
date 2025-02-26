@@ -11,7 +11,7 @@ RUN apt install ./libaribb25_0.2.9_amd64.deb
 
 # recpt1のインストール
 WORKDIR /tmp
-RUN git clone https://github.com/stz2012/recpt1.git
+RUN git clone --depth=1 https://github.com/stz2012/recpt1.git
 WORKDIR /tmp/recpt1/recpt1
 RUN ./autogen.sh
 RUN ./configure

@@ -1,4 +1,4 @@
-FROM debian:bookworm
+FROM debian:bookworm-slim
 
 # ビルド環境構築
 RUN apt update && apt install -y \
@@ -13,7 +13,8 @@ RUN apt update && apt install -y \
 
 # EDCBのインストール
 WORKDIR /tmp
-RUN git clone https://github.com/xtne6f/EDCB.git
+RUN git clone -b work-plus-s-250124 --depth=1 \
+    https://github.com/xtne6f/EDCB.git
 WORKDIR /tmp/EDCB/Document/Unix
 RUN make -j8
 RUN make install
@@ -29,19 +30,20 @@ COPY ./config/EpgDataCap_Bon.ini /var/local/edcb/EpgDataCap_Bon.ini
 
 # EDCB Material WebUIのインストール
 WORKDIR /tmp
-RUN git clone https://github.com/EMWUI/EDCB_Material_WebUI.git
+RUN git clone --depth=1 https://github.com/EMWUI/EDCB_Material_WebUI.git
 WORKDIR /tmp/EDCB_Material_WebUI
 RUN cp -r HttpPublic /var/local/edcb/
 RUN cp -r Setting /var/local/edcb/
 
 # BonDriver_LinuxMirakcのインストール
 WORKDIR /tmp
-RUN git clone https://github.com/matching/BonDriver_LinuxMirakc.git \
-    --recurse-submodules
+RUN git clone --depth=1 --recurse-submodules \
+    https://github.com/matching/BonDriver_LinuxMirakc.git
 WORKDIR /tmp/BonDriver_LinuxMirakc
 RUN make -j8
 RUN cp BonDriver_LinuxMirakc.so /usr/local/lib/edcb
-RUN cp BonDriver_LinuxMirakc.so.ini_sample /usr/local/lib/edcb/BonDriver_LinuxMirakc.so.ini
+RUN cp BonDriver_LinuxMirakc.so.ini_sample \
+    /usr/local/lib/edcb/BonDriver_LinuxMirakc.so.ini
 RUN mkdir /var/local/edcb/Setting/EpgData
 
 # デバッグ用に移動しておく
