@@ -1,3 +1,5 @@
 /mirakurun/conf/server.yml
 /mirakurun/data/
 !mirakurun/data/.gitkeep
+/EDCB/config/EpgTimerSrv.ini
+/EDCB/config/EpgDataCap_Bon.ini
