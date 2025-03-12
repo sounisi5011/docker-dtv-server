@@ -1,8 +1,12 @@
 FROM chinachu/mirakurun
 
 # ビルド環境構築
-RUN apt update && apt upgrade -y
-RUN apt install -y wget git autoconf automake
+RUN apt update && apt install -y --no-install-recommends \
+    wget \
+    git \
+    autoconf \
+    automake \
+    && rm -rf /var/lib/apt/lists/*
 
 # デコーダーのインストール
 WORKDIR /tmp

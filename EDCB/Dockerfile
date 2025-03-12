@@ -1,7 +1,7 @@
 FROM debian:bookworm-slim
 
 # ビルド環境構築
-RUN apt update && apt install -y \
+RUN apt update && apt install -y --no-install-recommends \
     git \
     make \
     gcc \
@@ -9,7 +9,8 @@ RUN apt update && apt install -y \
     liblua5.2-dev \
     lua-zlib \
     curl \
-    ffmpeg
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
 
 # EDCBのインストール
 WORKDIR /tmp
