@@ -9,7 +9,6 @@ Dockerで構築するMirakurun + EDCB + KonomiTVなTV視聴・録画環境
 - ホストPC上に以下のものが必要です：
   - Docker
   - px4_drvなどのチューナードライバ
-  - カードリーダ用のpcscd（ただしpcscd.socketは停止させてください）
 - ホストOSはUbuntu 24.04 LTSを想定しています。
 
 ### インストール
