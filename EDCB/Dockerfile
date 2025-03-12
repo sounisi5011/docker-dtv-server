@@ -10,6 +10,7 @@ RUN apt update && apt install -y --no-install-recommends \
     lua-zlib \
     curl \
     ffmpeg \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 # EDCBのインストール
