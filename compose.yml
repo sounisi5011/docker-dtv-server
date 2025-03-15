@@ -37,7 +37,9 @@ services:
       - mirakurun
     network_mode: host
     volumes:
-      - edcb:/var/local/edcb
+      - type: bind
+        source: "./EDCB/edcb/Common.ini"
+        target: "/var/local/edcb/Common.ini"
       - type: bind
         source: "./EDCB/edcb/EpgDataCap_Bon.ini"
         target: "/var/local/edcb/EpgDataCap_Bon.ini"
@@ -62,7 +64,9 @@ services:
     network_mode: host
     command: /usr/local/bin/EpgTimerSrv
     volumes:
-      - edcb:/var/local/edcb
+      - type: bind
+        source: "./EDCB/edcb/Common.ini"
+        target: "/var/local/edcb/Common.ini"
       - type: bind
         source: "./EDCB/edcb/EpgDataCap_Bon.ini"
         target: "/var/local/edcb/EpgDataCap_Bon.ini"
@@ -72,6 +76,9 @@ services:
       - type: bind
         source: "./EDCB/edcb/Setting"
         target: "/var/local/edcb/Setting"
+      - type: bind
+        source: "./EDCB/record"
+        target: "/record"
 
   konomitv:
     image: konomitv

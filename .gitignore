@@ -2,11 +2,10 @@
 /mirakurun/data/*
 !/mirakurun/data/.gitkeep
 
-/mirakurun/data/
-!mirakurun/data/.gitkeep
-/EDCB/config/EpgTimerSrv.ini
-/EDCB/config/EpgDataCap_Bon.ini
+/EDCB/edcb/Common.ini
 /EDCB/edcb/EpgDataCap_Bon.ini
 /EDCB/edcb/EpgTimerSrv.ini
 /EDCB/edcb/Setting/*
 !/EDCB/edcb/Setting/.gitkeep
+/EDCB/record/*
+!/EDCB/record/.gitkeep
