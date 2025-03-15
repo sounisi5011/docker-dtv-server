@@ -18,15 +18,16 @@ WORKDIR /tmp
 RUN git clone -b work-plus-s-250124 --depth=1 \
     https://github.com/xtne6f/EDCB.git
 WORKDIR /tmp/EDCB/Document/Unix
-RUN make -j8
+RUN make -j "$(nproc)"
 RUN make install
-RUN make extra -j8
+RUN make extra -j "$(nproc)"
 RUN make install_extra
 RUN mkdir /var/local/edcb
 RUN chmod 777 /var/local/edcb
 RUN make setup_ini
 RUN sed -i -e 's/^ALLOW_SETTING=.*/ALLOW_SETTING=true/' \
     /var/local/edcb/HttpPublic/legacy/util.lua
+RUN make clean
 
 # EDCB Material WebUIのインストール
 WORKDIR /tmp
@@ -40,11 +41,11 @@ WORKDIR /tmp
 RUN git clone --depth=1 --recurse-submodules \
     https://github.com/matching/BonDriver_LinuxMirakc.git
 WORKDIR /tmp/BonDriver_LinuxMirakc
-RUN make -j8
+RUN make -j "$(nproc)"
 RUN cp BonDriver_LinuxMirakc.so /usr/local/lib/edcb
 RUN cp BonDriver_LinuxMirakc.so.ini_sample \
     /usr/local/lib/edcb/BonDriver_LinuxMirakc.so.ini
-RUN mkdir /var/local/edcb/Setting/EpgData
+RUN make clean
 
 # デバッグ用に移動しておく
 WORKDIR /var/local/edcb

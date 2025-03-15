@@ -19,7 +19,8 @@ RUN git clone --depth=1 https://github.com/stz2012/recpt1.git
 WORKDIR /tmp/recpt1/recpt1
 RUN ./autogen.sh
 RUN ./configure
-RUN make -j8
+RUN make -j "$(nproc)"
 RUN make install
+RUN make clean
 
 WORKDIR /app
