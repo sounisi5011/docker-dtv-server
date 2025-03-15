@@ -62,6 +62,10 @@ docker compose up -d
 docker compose up -d --no-deps mirakurun edcb konomitv
 ```
 
+## 紹介記事
+
+[Dockerで構築！ミニPC + PX-W3U4でお手軽自宅録画サーバー](https://zenn.dev/nunawa/articles/ecb9ef2e237532)
+
 ## ライセンス
 
 docker-dtv-serverは、MITライセンスのもとで公開されています。
