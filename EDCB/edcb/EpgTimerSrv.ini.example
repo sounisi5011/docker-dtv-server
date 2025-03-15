@@ -18,6 +18,6 @@ Num=1
 0=BonDriver_LinuxMirakc.so
 [BonDriver_LinuxMirakc.so]
 Count=4
-GetEpg=2
+GetEpg=1
 EPGCount=2
 Priority=0
