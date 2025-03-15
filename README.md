@@ -2,6 +2,17 @@
 
 Dockerで構築するMirakurun + EDCB + KonomiTVなTV視聴・録画環境
 
+## 技術スタック
+
+- [Mirakurun](https://github.com/Chinachu/Mirakurun)
+- [tsukumijima/libaribb25](https://github.com/tsukumijima/libaribb25)
+- [stz2012/recpt1](https://github.com/stz2012/recpt1)
+- [xtne6f/EDCB](https://github.com/xtne6f/EDCB)
+- [EDCB_Material_WebUI](https://github.com/EMWUI/EDCB_Material_WebUI)
+- [BonDriver_LinuxMirakc](https://github.com/matching/BonDriver_LinuxMirakc)
+- [KonomiTV](https://github.com/tsukumijima/KonomiTV)
+- [Docker](https://www.docker.com/)
+
 ## Getting Started
 
 ### 前提条件
