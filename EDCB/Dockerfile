@@ -27,8 +27,6 @@ RUN chmod 777 /var/local/edcb
 RUN make setup_ini
 RUN sed -i -e 's/^ALLOW_SETTING=.*/ALLOW_SETTING=true/' \
     /var/local/edcb/HttpPublic/legacy/util.lua
-COPY ./config/EpgTimerSrv.ini /var/local/edcb/EpgTimerSrv.ini
-COPY ./config/EpgDataCap_Bon.ini /var/local/edcb/EpgDataCap_Bon.ini
 
 # EDCB Material WebUIのインストール
 WORKDIR /tmp

@@ -38,6 +38,15 @@ services:
     network_mode: host
     volumes:
       - edcb:/var/local/edcb
+      - type: bind
+        source: "./EDCB/edcb/EpgDataCap_Bon.ini"
+        target: "/var/local/edcb/EpgDataCap_Bon.ini"
+      - type: bind
+        source: "./EDCB/edcb/EpgTimerSrv.ini"
+        target: "/var/local/edcb/EpgTimerSrv.ini"
+      - type: bind
+        source: "./EDCB/edcb/Setting"
+        target: "/var/local/edcb/Setting"
 
   edcb:
     image: edcb
@@ -54,6 +63,15 @@ services:
     command: /usr/local/bin/EpgTimerSrv
     volumes:
       - edcb:/var/local/edcb
+      - type: bind
+        source: "./EDCB/edcb/EpgDataCap_Bon.ini"
+        target: "/var/local/edcb/EpgDataCap_Bon.ini"
+      - type: bind
+        source: "./EDCB/edcb/EpgTimerSrv.ini"
+        target: "/var/local/edcb/EpgTimerSrv.ini"
+      - type: bind
+        source: "./EDCB/edcb/Setting"
+        target: "/var/local/edcb/Setting"
 
   konomitv:
     image: konomitv
@@ -80,6 +98,3 @@ services:
         target: '/host-rootfs/'
     devices:
       - '/dev/dri/:/dev/dri/'
-
-volumes:
-  edcb:
