@@ -15,7 +15,7 @@ RUN apt update && apt install -y --no-install-recommends \
 
 # EDCBのインストール
 WORKDIR /tmp
-RUN git clone -b work-plus-s-250124 --depth=1 \
+RUN git clone -b work-plus-s-250531 --depth=1 \
     https://github.com/xtne6f/EDCB.git
 WORKDIR /tmp/EDCB/Document/Unix
 RUN make -j "$(nproc)"
