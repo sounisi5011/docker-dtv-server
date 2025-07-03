@@ -19,7 +19,7 @@ Dockerで構築するMirakurun + EDCB構成のTV録画環境
 - ホストPC上に以下のものが必要です：
   - Docker
   - px4_drvなどのチューナードライバ
-- ホストOSはUbuntu 24.04 LTSを想定しています。
+- ホストOSは[Raspberry Pi OS Lite (bookworm)](https://www.raspberrypi.com/software/operating-systems/#raspberry-pi-os-64-bit)を想定しています。
 
 ### インストール
 
