@@ -21,6 +21,7 @@ Dockerで構築する[Mirakurun] + [EDCB]構成のTV録画環境
 
 - [KonomiTV]の導入を止める
 - [recpt1](https://github.com/stz2012/recpt1)および[libaribb25](https://github.com/tsukumijima/libaribb25)の代わりに[recisdb]を使用
+- Dockerのログを[`json-file`](https://docs.docker.com/engine/logging/drivers/json-file/)の代わりに[`journald`](https://docs.docker.com/engine/logging/drivers/journald/)を使って書き込む
 
 [recisdb]: https://github.com/kazuki0824/recisdb-rs
 
