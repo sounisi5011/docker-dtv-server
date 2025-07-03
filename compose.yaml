@@ -23,10 +23,13 @@ services:
       - /dev/px4video3:/dev/px4video3
     restart: always
     logging:
-      driver: json-file
+      # ログはjournaldで記録する
+      # デフォルトのjson-fileはログが /var/lib/docker/containers/*/*-json.log ファイルに記録される一方、
+      # journaldの場合はログが /var/log/ 以下に集約されるため、
+      # log2ramやzram-configのような書き込み頻度を抑えてSDカードの寿命を伸ばすソフトウェアが使用しやすい。
+      driver: journald
       options:
-        max-file: "1"
-        max-size: 10m
+        tag: mirakurun
 
   edcb_chscan:
     image: edcb
