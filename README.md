@@ -17,11 +17,17 @@ Dockerで構築する[Mirakurun] + [EDCB]構成のTV録画環境
 [KonomiTV]: https://github.com/tsukumijima/KonomiTV
 [VLC]: https://www.videolan.org/vlc/
 
+## fork元からの変更点
+
+- [KonomiTV]の導入を止める
+- [recpt1](https://github.com/stz2012/recpt1)および[libaribb25](https://github.com/tsukumijima/libaribb25)の代わりに[recisdb]を使用
+
+[recisdb]: https://github.com/kazuki0824/recisdb-rs
+
 ## 技術スタック
 
 - [Mirakurun]
-- [tsukumijima/libaribb25](https://github.com/tsukumijima/libaribb25)
-- [stz2012/recpt1](https://github.com/stz2012/recpt1)
+- [kazuki0824/recisdb-rs][recisdb]
 - [xtne6f/EDCB][EDCB]
 - [EDCB_Material_WebUI](https://github.com/EMWUI/EDCB_Material_WebUI)
 - [BonDriver_LinuxMirakc](https://github.com/matching/BonDriver_LinuxMirakc)
