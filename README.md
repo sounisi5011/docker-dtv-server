@@ -1,6 +1,6 @@
 # docker-dtv-server
 
-Dockerで構築するMirakurun + EDCB + KonomiTVなTV視聴・録画環境
+Dockerで構築するMirakurun + EDCB構成のTV録画環境
 
 ## 技術スタック
 
@@ -10,7 +10,6 @@ Dockerで構築するMirakurun + EDCB + KonomiTVなTV視聴・録画環境
 - [xtne6f/EDCB](https://github.com/xtne6f/EDCB)
 - [EDCB_Material_WebUI](https://github.com/EMWUI/EDCB_Material_WebUI)
 - [BonDriver_LinuxMirakc](https://github.com/matching/BonDriver_LinuxMirakc)
-- [KonomiTV](https://github.com/tsukumijima/KonomiTV)
 - [Docker](https://www.docker.com/)
 
 ## Getting Started
@@ -46,20 +45,18 @@ Priority=0
         target: "/record"
 ```
 
-KonomiTV用に`KonomiTV`ディレクトリ以下にconfig.yamlを作成してください。
-
 設定が完了したら、以下のコマンドでDockerイメージをビルドし、コンテナを起動します：
 
 ```bash
 docker compose up -d
 ```
 
-最初にEDCBチャンネルスキャン用のコンテナが立ち上がります。チャンネルスキャンには3〜4分ほどかかりますので、完了するまで待ってからEDCBとKonomiTVにアクセスしてください。
+最初にEDCBチャンネルスキャン用のコンテナが立ち上がります。チャンネルスキャンには3〜4分ほどかかりますので、完了するまで待ってからEDCBにアクセスしてください。
 
 チャンネルスキャンが必要ない場合は、次のコマンドでスキップできます：
 
 ```bash
-docker compose up -d --no-deps mirakurun edcb konomitv
+docker compose up -d --no-deps mirakurun edcb
 ```
 
 ## 紹介記事
