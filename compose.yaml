@@ -79,29 +79,3 @@ services:
       - type: bind
         source: "./EDCB/record"
         target: "/record"
-
-  konomitv:
-    image: konomitv
-    container_name: KonomiTV
-    build:
-      context: ./KonomiTV
-    depends_on:
-      - mirakurun
-      - edcb
-    restart: always
-    network_mode: host
-    volumes:
-      - type: bind
-        source: './KonomiTV/config.yaml'
-        target: '/code/config.yaml'
-      - type: bind
-        source: './KonomiTV/server/data/'
-        target: '/code/server/data/'
-      - type: bind
-        source: './KonomiTV/server/logs/'
-        target: '/code/server/logs/'
-      - type: bind
-        source: '/'
-        target: '/host-rootfs/'
-    devices:
-      - '/dev/dri/:/dev/dri/'
