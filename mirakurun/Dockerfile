@@ -1,7 +1,7 @@
 FROM chinachu/mirakurun
 
 # ビルド環境構築
-RUN apt update && apt install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
     git \
     autoconf \
@@ -10,17 +10,17 @@ RUN apt update && apt install -y --no-install-recommends \
 
 # デコーダーのインストール
 WORKDIR /tmp
-RUN wget https://github.com/tsukumijima/libaribb25/releases/download/v0.2.9/libaribb25_0.2.9_amd64.deb
-RUN apt install ./libaribb25_0.2.9_amd64.deb
+RUN wget -nv https://github.com/tsukumijima/libaribb25/releases/download/v0.2.9/libaribb25_0.2.9_amd64.deb && \
+    apt-get install -y --no-install-recommends ./libaribb25_0.2.9_amd64.deb
 
 # recpt1のインストール
 WORKDIR /tmp
 RUN git clone --depth=1 https://github.com/stz2012/recpt1.git
 WORKDIR /tmp/recpt1/recpt1
-RUN ./autogen.sh
-RUN ./configure
-RUN make -j "$(nproc)"
-RUN make install
-RUN make clean
+RUN ./autogen.sh && \
+    ./configure && \
+    make -j "$(nproc)" && \
+    make install && \
+    make clean
 
 WORKDIR /app
