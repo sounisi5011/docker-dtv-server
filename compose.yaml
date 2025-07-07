@@ -1,8 +1,8 @@
 services:
-  isdb_scanner:
-    container_name: ISDBScanner
+  auto_gen_config:
+    container_name: auto-gen-config.ISDBScanner
     build:
-      context: ./isdb-scanner
+      context: ./autogen-config-with-isdb-scanner
     volumes:
       # ホストのpcscdを使う。これにより、ホストのpcscd.socketを止める必要がなくなる。
       # また、カードリーダーのUSBが物理的に抜けた場合でも、USBを再接続すればコンテナを再起動することなく再認識される。
@@ -29,7 +29,7 @@ services:
       # log2ramやzram-configのような書き込み頻度を抑えてSDカードの寿命を伸ばすソフトウェアが使用しやすい。
       driver: journald
       options:
-        tag: isdb-scanner
+        tag: dtv-autogen-config
     # いわゆるPID1問題を回避するため、Tiniを使用する
     # see https://zenn.dev/sato_frontend/articles/fc49ffb2fe5dfc
     init: true
@@ -40,7 +40,7 @@ services:
     build:
       context: ./mirakurun
     depends_on:
-      isdb_scanner:
+      auto_gen_config:
         condition: service_completed_successfully
     cap_add:
       - SYS_ADMIN
