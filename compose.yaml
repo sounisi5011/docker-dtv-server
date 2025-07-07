@@ -1,15 +1,8 @@
 services:
   isdb_scanner:
-    image: isdb-scanner
     container_name: ISDBScanner
     build:
       context: ./isdb-scanner
-    network_mode: host
-    cap_add:
-      - SYS_ADMIN
-      - SYS_NICE
-    device_cgroup_rules:
-      - 'c *:* rmw'
     volumes:
       - /var/run/pcscd/pcscd.comm:/var/run/pcscd/pcscd.comm
       - ./mirakurun/conf:/mirakurun-config
