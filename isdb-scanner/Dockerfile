@@ -14,8 +14,8 @@ RUN wget https://github.com/kazuki0824/recisdb-rs/releases/download/1.2.3/recisd
     && rm /tmp/recisdb.deb
 
 # isdb-scannerのインストール
-RUN sudo wget https://github.com/tsukumijima/ISDBScanner/releases/download/v1.3.2/isdb-scanner-arm -O /usr/local/bin/isdb-scanner \
-    && sudo chmod +x /usr/local/bin/isdb-scanner
+RUN wget https://github.com/tsukumijima/ISDBScanner/releases/download/v1.3.2/isdb-scanner-arm -O /usr/local/bin/isdb-scanner \
+    && chmod +x /usr/local/bin/isdb-scanner
 
 # entrypoint.shをコンテナ内にコピー
 COPY --chmod=755 ./entrypoint.sh /usr/local/bin/entrypoint.sh
