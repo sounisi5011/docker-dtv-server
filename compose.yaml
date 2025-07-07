@@ -1,9 +1,48 @@
 services:
+  isdb_scanner:
+    image: isdb-scanner
+    container_name: ISDBScanner
+    build:
+      context: ./isdb-scanner
+    network_mode: host
+    cap_add:
+      - SYS_ADMIN
+      - SYS_NICE
+    device_cgroup_rules:
+      - 'c *:* rmw'
+    volumes:
+      - /var/run/pcscd/pcscd.comm:/var/run/pcscd/pcscd.comm
+      - ./mirakurun/conf:/mirakurun-config
+      - ./EDCB/edcb/Setting:/edcb-setting
+    devices:
+      - /dev/bus:/dev/bus
+      - /dev/px4video0
+      - /dev/px4video1
+      - /dev/px4video2
+      - /dev/px4video3
+      - /dev/px4video4
+      - /dev/px4video5
+      - /dev/px4video6
+      - /dev/px4video7
+    tmpfs:
+      - /tmp
+    logging:
+      # ログはjournaldで記録する
+      # デフォルトのjson-fileはログが /var/lib/docker/containers/*/*-json.log ファイルに記録される一方、
+      # journaldの場合はログが /var/log/ 以下に集約されるため、
+      # log2ramやzram-configのような書き込み頻度を抑えてSDカードの寿命を伸ばすソフトウェアが使用しやすい。
+      driver: journald
+      options:
+        tag: mirakurun
+
   mirakurun:
     image: mirakurun
     container_name: Mirakurun
     build:
       context: ./mirakurun
+    depends_on:
+      isdb_scanner:
+        condition: service_completed_successfully
     cap_add:
       - SYS_ADMIN
       - SYS_NICE
