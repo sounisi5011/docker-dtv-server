@@ -27,6 +27,19 @@ if [ $$ == 1 ]; then
   trap trap_exit 0
 fi
 
+CHANNELS_FILEPATH='/mirakurun-config/channels.yml'
+TUNERS_FILEPATH='/mirakurun-config/tuners.yml'
+CHSET4_FILEPATH='/edcb-setting/BonDriver_LinuxMirakc(LinuxMirakc).ChSet4.txt'
+CHSET5_FILEPATH='/edcb-setting/ChSet5.txt'
+readonly CHANNELS_FILEPATH TUNERS_FILEPATH CHSET4_FILEPATH CHSET5_FILEPATH
+
+##### 設定ファイルの存在チェック #####
+# すでに設定ファイルが作成済みである場合は、以降の処理を行わずに終了する
+if [[ -s "${CHANNELS_FILEPATH}" && -s "${TUNERS_FILEPATH}" && -s "${CHSET4_FILEPATH}" && -s "${CHSET5_FILEPATH}" ]]; then
+  echo 'All configuration files have been created'
+  exit 0
+fi
+
 ##### ISDBScannerを実行 #####
 # Note: コンテナ停止時にISDBScannerを正常終了させるため、バックグラウンド実行しつつwaitコマンドで実行終了まで待機させる。
 #       どういう理屈なのか見当がつかないが、これがなければコンテナ停止時に10秒ほど経過した後ISDBScannerを強制終了されてしまう。
@@ -34,7 +47,8 @@ isdb-scanner ./isdb-scanner-result &
 wait
 
 ##### Mirakurun用の設定ファイルを作成 #####
-cp ./isdb-scanner-result/Mirakurun/{channels.yml,tuners.yml} /mirakurun-config/
+cp ./isdb-scanner-result/Mirakurun/channels.yml "${CHANNELS_FILEPATH}"
+cp ./isdb-scanner-result/Mirakurun/tuners.yml "${TUNERS_FILEPATH}"
 
 ##### EDCB用の設定ファイルを作成 #####
 
@@ -42,7 +56,7 @@ cp ./isdb-scanner-result/Mirakurun/{channels.yml,tuners.yml} /mirakurun-config/
 # Note: Linux版EDCBのChSet5.txtは改行コードがLFである一方、
 #       Windows版EDCBのChSet5.txtは改行コードはCRLFであるため、
 #       改行コードを変換してコピーする
-< ./isdb-scanner-result/EDCB-Wine/ChSet5.txt tr -d '\r' > /edcb-setting/ChSet5.txt
+< ./isdb-scanner-result/EDCB-Wine/ChSet5.txt tr -d '\r' > "${CHSET5_FILEPATH}"
 
 # ChSet4.txtを作成する
 # Note: 検証した結果、ISDBScannerが作成するWindows版EDCB & BonDriver_mirakc向けのChSet4.txtと
@@ -77,4 +91,4 @@ cp ./isdb-scanner-result/Mirakurun/{channels.yml,tuners.yml} /mirakurun-config/
       ] | join("\t")
     ' \
     ./isdb-scanner-result/Channels.json
-} > '/edcb-setting/BonDriver_LinuxMirakc(LinuxMirakc).ChSet4.txt'
+} > "${CHSET4_FILEPATH}"
