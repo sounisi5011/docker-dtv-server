@@ -22,8 +22,10 @@ Dockerで構築する[Mirakurun] + [EDCB]構成のTV録画環境
 - [KonomiTV]の導入を止める
 - [recpt1](https://github.com/stz2012/recpt1)および[libaribb25](https://github.com/tsukumijima/libaribb25)の代わりに[recisdb]を使用
 - Dockerのログを[`json-file`](https://docs.docker.com/engine/logging/drivers/json-file/)の代わりに[`journald`](https://docs.docker.com/engine/logging/drivers/journald/)を使って書き込む
+- 初回起動時に[ISDBScanner]を使用して[Mirakurun]および[EDCB]の設定ファイルを自動生成
 
 [recisdb]: https://github.com/kazuki0824/recisdb-rs
+[ISDBScanner]: https://github.com/tsukumijima/ISDBScanner
 
 ## 技術スタック
 
@@ -44,8 +46,6 @@ Dockerで構築する[Mirakurun] + [EDCB]構成のTV録画環境
 - ホストOSは[Raspberry Pi OS Lite (bookworm)](https://www.raspberrypi.com/software/operating-systems/#raspberry-pi-os-64-bit)を想定
 
 ### インストール
-
-Mirakurun用に`mirakurun/conf`ディレクトリ以下に`channels.yml`、`tuners.yml`を作成する。[ISDBScanner](https://github.com/tsukumijima/ISDBScanner)などで自動生成可能。
 
 EDCB用に`EDCB/edcb`ディレクトリ以下に`Common.ini`、`EpgDataCap_Bon.ini`、`EpgTimerSrv.ini`を作成する。`EpgTimerSrv.ini`の以下の項目は使用するチューナーに合わせて変更すること。
 
@@ -71,7 +71,7 @@ Priority=0
 docker compose up -d
 ```
 
-最初にEDCBチャンネルスキャン用のコンテナが立ち上がる。チャンネルスキャンには3〜4分ほどかかるため、完了するまで待ってからEDCBにアクセスする。チャンネルスキャンが必要ない場合は、次のコマンドでスキップ可能：
+最初にチューナースキャン用のコンテナが立ち上がり、続いてMirakurun、EDCBチャンネルスキャン用のコンテナ、最後にEDCBが立ち上がる。チューナースキャンには7分前後、チャンネルスキャンには3〜4分ほどかかるため、完了するまで待ってからEDCBにアクセスする。チャンネルスキャンが必要ない場合は、次のコマンドでスキップ可能：
 
 ```bash
 docker compose up -d --no-deps mirakurun edcb
