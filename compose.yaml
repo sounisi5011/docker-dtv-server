@@ -30,6 +30,9 @@ services:
       driver: journald
       options:
         tag: isdb-scanner
+    # いわゆるPID1問題を回避するため、Tiniを使用する
+    # see https://zenn.dev/sato_frontend/articles/fc49ffb2fe5dfc
+    init: true
 
   mirakurun:
     image: mirakurun
