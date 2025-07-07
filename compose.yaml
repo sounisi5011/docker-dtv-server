@@ -24,8 +24,6 @@ services:
       - /dev/px4video5
       - /dev/px4video6
       - /dev/px4video7
-    tmpfs:
-      - /tmp
     logging:
       # ログはjournaldで記録する
       # デフォルトのjson-fileはログが /var/lib/docker/containers/*/*-json.log ファイルに記録される一方、
