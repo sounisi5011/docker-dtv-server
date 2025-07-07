@@ -12,7 +12,7 @@ set -euo pipefail
 # see https://note.shiftinc.jp/n/ndc63c45d9f97
 #     https://qiita.com/ko1nksm/items/e8c2fbf58687e6979448
 #     https://github.com/Chinachu/Mirakurun/blob/61c4155d2535c56fbf6fd379c5e8aba779fd642b/docker/container-init.sh
-if [ $$ == 1 ]; then
+if [[ $$ == 1 ]]; then
   function trap_exit() {
     local pids
     pids="$(jobs -p)"
