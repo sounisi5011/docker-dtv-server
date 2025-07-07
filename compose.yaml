@@ -4,11 +4,16 @@ services:
     build:
       context: ./isdb-scanner
     volumes:
+      # ホストのpcscdを使う。これにより、ホストのpcscd.socketを止める必要がなくなる。
+      # また、カードリーダーのUSBが物理的に抜けた場合でも、USBを再接続すればコンテナを再起動することなく再認識される。
       - /var/run/pcscd/pcscd.comm:/var/run/pcscd/pcscd.comm
+      # MirakurunおよびEDCBの設定ファイル格納ディレクトリをマウント
       - ./mirakurun/conf:/mirakurun-config
       - ./EDCB/edcb/Setting:/edcb-setting
     devices:
+      # /dev/bus は必須。これがなければチューナーが認識されない
       - /dev/bus:/dev/bus
+      # 以下、チューナーのデバイスファイル
       - /dev/px4video0
       - /dev/px4video1
       - /dev/px4video2
