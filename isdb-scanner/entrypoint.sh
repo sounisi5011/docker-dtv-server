@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# どこか一箇所でもコマンドが失敗したら即座にシェルスクリプト全体を異常終了させる
+set -e
+set -o pipefail
+
 ##### ISDBScannerを実行 #####
 isdb-scanner ./isdb-scanner-result
 
