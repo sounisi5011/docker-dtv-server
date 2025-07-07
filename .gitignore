@@ -1,6 +1,5 @@
 /mirakurun/conf/*
-!/mirakurun/conf/channels.yml.example
-!/mirakurun/conf/tuners.yml.example
+!/mirakurun/conf/.gitkeep
 /mirakurun/data/*
 !/mirakurun/data/.gitkeep
 
