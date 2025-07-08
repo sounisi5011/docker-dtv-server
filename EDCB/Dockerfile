@@ -49,8 +49,6 @@ RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
     liblua5.2-dev \
     lua-zlib \
-    ffmpeg \
-    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 # ビルドステージから必要なファイルをコピー
