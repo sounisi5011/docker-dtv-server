@@ -36,18 +36,12 @@ services:
 
   mirakurun:
     image: mirakurun
-    container_name: Mirakurun
     build:
       context: ./mirakurun
+    container_name: Mirakurun
     depends_on:
       auto_gen_config:
         condition: service_completed_successfully
-    cap_add:
-      - SYS_ADMIN
-      - SYS_NICE
-    device_cgroup_rules:
-      - 'c *:* rmw'
-    network_mode: host
     volumes:
       - ./mirakurun/conf:/app-config
       - ./mirakurun/data:/app-data
@@ -68,6 +62,21 @@ services:
       # for debug
       LOG_LEVEL: "3"
       DEBUG: "true"
+    network_mode: host
+    restart: always
+    logging:
+      # ログはjournaldで記録する
+      # デフォルトのjson-fileはログが /var/lib/docker/containers/*/*-json.log ファイルに記録される一方、
+      # journaldの場合はログが /var/log/ 以下に集約されるため、
+      # log2ramやzram-configのような書き込み頻度を抑えてSDカードの寿命を伸ばすソフトウェアが使用しやすい。
+      driver: journald
+      options:
+        tag: mirakurun
+    cap_add:
+      - SYS_ADMIN
+      - SYS_NICE
+    device_cgroup_rules:
+      - 'c *:* rmw'
     devices:
       # /dev/bus は必須。これがなければチューナーが認識されない
       - /dev/bus:/dev/bus
@@ -82,15 +91,6 @@ services:
       - /dev/px4video7:/dev/px4video7
     tmpfs:
       - /tmp
-    restart: always
-    logging:
-      # ログはjournaldで記録する
-      # デフォルトのjson-fileはログが /var/lib/docker/containers/*/*-json.log ファイルに記録される一方、
-      # journaldの場合はログが /var/log/ 以下に集約されるため、
-      # log2ramやzram-configのような書き込み頻度を抑えてSDカードの寿命を伸ばすソフトウェアが使用しやすい。
-      driver: journald
-      options:
-        tag: mirakurun
 
   edcb_chscan:
     image: edcb
