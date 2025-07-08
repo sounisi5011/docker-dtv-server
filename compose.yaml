@@ -113,13 +113,28 @@ services:
     tmpfs:
       - /tmp
 
+  # EDCBの設定ファイルを作成し、ホストのディレクトリに書き込む
+  # Note: 宛先パスが存在しない場合、Dockerはマウント時にファイルがあるべきパスにディレクトリを作成してしまう。
+  #       この挙動を回避するため、ホストとコンテナで共有するべき設定ファイルを予めホスト側に作成しておく。
+  edcb_create_config:
+    image: edcb
+    container_name: EDCB.CreateConfigFiles
+    build:
+      context: ./EDCB
+    command: /usr/local/bin/setup-ini.sh /var/local/host_data/edcb
+    volumes:
+      - ./EDCB/edcb:/var/local/host_data/edcb
+
   edcb_chscan:
     image: edcb
     container_name: EDCB_ChScan
     build:
       context: ./EDCB
     depends_on:
-      - mirakurun
+      mirakurun:
+        condition: service_started
+      edcb_create_config:
+        condition: service_completed_successfully
     network_mode: host
     command: /usr/local/bin/EpgDataCap_Bon -d BonDriver_LinuxMirakc.so -chscan
     volumes:
@@ -144,6 +159,8 @@ services:
     depends_on:
       mirakurun:
         condition: service_started
+      edcb_create_config:
+        condition: service_completed_successfully
       edcb_chscan:
         condition: service_completed_successfully
     restart: always

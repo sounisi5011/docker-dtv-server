@@ -57,6 +57,9 @@ RUN mkdir --parents /var/local/edcb \
     && chmod 777 /var/local/edcb
 COPY --from=builder /var/local/edcb/ /var/local/edcb/
 
+# setup-ini.shをコピーして実行権限付与
+COPY --chmod=755 ./setup-ini.sh /usr/local/bin/setup-ini.sh
+
 # デバッグ用に移動しておく
 WORKDIR /var/local/edcb
 
