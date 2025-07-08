@@ -35,7 +35,7 @@ services:
     init: true
 
   # Note: Mirakurun公式の環境構築手順では、インストール時に `docker compose run --rm -e SETUP=true mirakurun` コマンドを実行している
-  #       see https://github.com/Chinachu/Mirakurun/blob/master/doc/Platforms.ja.md#%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB--%E3%82%A2%E3%83%B3%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB--%E3%82%A2%E3%83%83%E3%83%97%E3%83%87%E3%83%BC%E3%83%88
+  #       see https://github.com/Chinachu/Mirakurun/blob/61c4155d2535c56fbf6fd379c5e8aba779fd642b/doc/Platforms.ja.md#%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB--%E3%82%A2%E3%83%B3%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB--%E3%82%A2%E3%83%83%E3%83%97%E3%83%87%E3%83%BC%E3%83%88
   #       しかしソースコードを調査したところ、環境変数 `SETUP=true` は初回起動処理後にMirakurunを終了するための条件分岐のみで使用されている。
   #       see https://github.com/Chinachu/Mirakurun/blob/61c4155d2535c56fbf6fd379c5e8aba779fd642b/src/server.ts#L94-L97
   #       実際に動作検証しても、初回起動時のセットアップ処理は `docker compose up -d` コマンド実行時に自動で行われる。
