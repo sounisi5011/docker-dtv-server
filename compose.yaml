@@ -45,6 +45,8 @@ services:
     cap_add:
       - SYS_ADMIN
       - SYS_NICE
+    device_cgroup_rules:
+      - 'c *:* rmw'
     ports:
       - "40772:40772"
       - "9229:9229"
@@ -53,12 +55,20 @@ services:
       - ./mirakurun/data:/app-data
     environment:
       TZ: "Asia/Tokyo"
+      DISABLE_PCSCD: 1
+      DISABLE_B25_TEST: 1
+      DOCKER_NETWORK: host
+      # for debug
+      LOG_LEVEL: "3"
+      DEBUG: "true"
     devices:
       - /dev/bus:/dev/bus
       - /dev/px4video0:/dev/px4video0
       - /dev/px4video1:/dev/px4video1
       - /dev/px4video2:/dev/px4video2
       - /dev/px4video3:/dev/px4video3
+    tmpfs:
+      - /tmp
     restart: always
     logging:
       # ログはjournaldで記録する
