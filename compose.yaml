@@ -35,7 +35,11 @@ services:
     init: true
 
   mirakurun:
-    image: mirakurun
+    image:
+      # このコンテナは常にローカルのDockerfileに基づいて作成されるため、コンテナイメージをpullすることはない。
+      # しかしimageがなければ、`docker image`コマンドや`docker ps`コマンドでは自動生成されたコンテナイメージ名が使用される。
+      # よって、pull_policyでpullを禁止しつつ、imageも併用する。
+      mirakurun
     build:
       context: ./mirakurun
     container_name: Mirakurun
@@ -89,6 +93,9 @@ services:
       - /dev/px4video5:/dev/px4video5
       - /dev/px4video6:/dev/px4video6
       - /dev/px4video7:/dev/px4video7
+    # このコンテナは常にローカルのDockerfileに基づいて作成されるため、
+    # コンテナイメージのpullを常に許可しない。
+    pull_policy: never
     tmpfs:
       - /tmp
 
