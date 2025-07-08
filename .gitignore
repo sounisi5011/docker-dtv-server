@@ -2,6 +2,10 @@
 !/mirakurun/conf/.gitkeep
 /mirakurun/data/*
 !/mirakurun/data/.gitkeep
+/mirakurun/opt/*
+!/mirakurun/opt/.gitkeep
+/mirakurun/run/*
+!/mirakurun/run/.gitkeep
 
 /EDCB/edcb/Common.ini
 /EDCB/edcb/EpgDataCap_Bon.ini
