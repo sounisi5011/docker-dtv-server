@@ -1,7 +1,9 @@
 FROM debian:bookworm-slim AS builder
 
 # ビルド環境構築
-RUN apt-get update && apt-get install --assume-yes --no-install-recommends \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    apt-get update && apt-get install --assume-yes --no-install-recommends \
     git \
     make \
     gcc \
@@ -46,7 +48,9 @@ RUN make -j "$(nproc)" \
 FROM debian:bookworm-slim AS runtime
 
 # ランタイム依存関係のみインストール
-RUN apt-get update \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
     liblua5.2-dev \
     lua-zlib \
