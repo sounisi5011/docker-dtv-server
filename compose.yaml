@@ -34,6 +34,13 @@ services:
     # see https://zenn.dev/sato_frontend/articles/fc49ffb2fe5dfc
     init: true
 
+  # Note: Mirakurun公式の環境構築手順では、インストール時に `docker compose run --rm -e SETUP=true mirakurun` コマンドを実行している
+  #       see https://github.com/Chinachu/Mirakurun/blob/master/doc/Platforms.ja.md#%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB--%E3%82%A2%E3%83%B3%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB--%E3%82%A2%E3%83%83%E3%83%97%E3%83%87%E3%83%BC%E3%83%88
+  #       しかしソースコードを調査したところ、環境変数 `SETUP=true` は初回起動処理後にMirakurunを終了するための条件分岐のみで使用されている。
+  #       see https://github.com/Chinachu/Mirakurun/blob/61c4155d2535c56fbf6fd379c5e8aba779fd642b/src/server.ts#L94-L97
+  #       実際に動作検証しても、初回起動時のセットアップ処理は `docker compose up -d` コマンド実行時に自動で行われる。
+  #       おそらく `docker compose up -d` コマンドでセットアップ処理を完了させたあと、生成された各種設定ファイルを手動修正させることが目的であるものと考える。
+  #       よってこの手順では `docker compose run --rm -e SETUP=true mirakurun` コマンド相当の処理は省略している。
   mirakurun:
     image:
       # このコンテナは常にローカルのDockerfileに基づいて作成されるため、コンテナイメージをpullすることはない。
