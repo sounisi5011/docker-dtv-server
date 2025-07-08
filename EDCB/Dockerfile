@@ -5,17 +5,17 @@ FROM buildpack-deps:bookworm AS builder
 # see https://github.com/matching/BonDriver_LinuxMirakc/blob/cfbefc6d21dab4009db5f124984c1b720b76d869/README.md#%E3%83%93%E3%83%AB%E3%83%89%E6%96%B9%E6%B3%95
 RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
-        git \
         make gcc g++ \
         liblua5.2-dev lua-zlib \
         curl ca-certificates \
+        git \
     && rm --recursive --force /var/lib/apt/lists/*
 WORKDIR /tmp
 
 # EDCBのビルド
 # see https://github.com/xtne6f/EDCB/blob/2b714764ff87199995a68efa065f759816c7bcee/Document/HowToBuild.txt#%E3%83%93%E3%83%AB%E3%83%89linux
 RUN git clone --branch work-plus-s-250531 --depth 1 \
-    https://github.com/xtne6f/EDCB.git ./EDCB \
+        https://github.com/xtne6f/EDCB.git ./EDCB \
     && cd ./EDCB/Document/Unix \
     && make --jobs="$(nproc)" \
     && make install \
@@ -35,7 +35,7 @@ RUN git clone --depth 1 https://github.com/EMWUI/EDCB_Material_WebUI.git ./EDCB_
 # BonDriver_LinuxMirakcのビルド
 # see https://github.com/matching/BonDriver_LinuxMirakc/blob/cfbefc6d21dab4009db5f124984c1b720b76d869/README.md#%E3%83%93%E3%83%AB%E3%83%89%E6%96%B9%E6%B3%95
 RUN git clone --depth 1 --recurse-submodules \
-    https://github.com/matching/BonDriver_LinuxMirakc.git ./BonDriver_LinuxMirakc \
+        https://github.com/matching/BonDriver_LinuxMirakc.git ./BonDriver_LinuxMirakc \
     && cd ./BonDriver_LinuxMirakc \
     && make --jobs="$(nproc)" \
     && cp ./BonDriver_LinuxMirakc.so /usr/local/lib/edcb/ \
@@ -47,8 +47,7 @@ FROM debian:bookworm-slim AS runtime
 # ランタイム依存関係のみインストール
 RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
-    liblua5.2-dev \
-    lua-zlib \
+        liblua5.2-dev lua-zlib \
     && rm --recursive --force /var/lib/apt/lists/*
 
 # ビルドステージから必要なファイルをコピー
