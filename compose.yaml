@@ -138,18 +138,10 @@ services:
     network_mode: host
     command: /usr/local/bin/EpgDataCap_Bon -d BonDriver_LinuxMirakc.so -chscan
     volumes:
-      - type: bind
-        source: "./EDCB/edcb/Common.ini"
-        target: "/var/local/edcb/Common.ini"
-      - type: bind
-        source: "./EDCB/edcb/EpgDataCap_Bon.ini"
-        target: "/var/local/edcb/EpgDataCap_Bon.ini"
-      - type: bind
-        source: "./EDCB/edcb/EpgTimerSrv.ini"
-        target: "/var/local/edcb/EpgTimerSrv.ini"
-      - type: bind
-        source: "./EDCB/edcb/Setting"
-        target: "/var/local/edcb/Setting"
+      - ./EDCB/edcb/Common.ini:/var/local/edcb/Common.ini
+      - ./EDCB/edcb/EpgDataCap_Bon.ini:/var/local/edcb/EpgDataCap_Bon.ini
+      - ./EDCB/edcb/EpgTimerSrv.ini:/var/local/edcb/EpgTimerSrv.ini
+      - ./EDCB/edcb/Setting:/var/local/edcb/Setting
 
   edcb:
     image: edcb
@@ -166,18 +158,8 @@ services:
     restart: always
     network_mode: host
     volumes:
-      - type: bind
-        source: "./EDCB/edcb/Common.ini"
-        target: "/var/local/edcb/Common.ini"
-      - type: bind
-        source: "./EDCB/edcb/EpgDataCap_Bon.ini"
-        target: "/var/local/edcb/EpgDataCap_Bon.ini"
-      - type: bind
-        source: "./EDCB/edcb/EpgTimerSrv.ini"
-        target: "/var/local/edcb/EpgTimerSrv.ini"
-      - type: bind
-        source: "./EDCB/edcb/Setting"
-        target: "/var/local/edcb/Setting"
-      - type: bind
-        source: "./EDCB/record"
-        target: "/record"
+      - ./EDCB/edcb/Common.ini:/var/local/edcb/Common.ini
+      - ./EDCB/edcb/EpgDataCap_Bon.ini:/var/local/edcb/EpgDataCap_Bon.ini
+      - ./EDCB/edcb/EpgTimerSrv.ini:/var/local/edcb/EpgTimerSrv.ini
+      - ./EDCB/edcb/Setting:/var/local/edcb/Setting
+      - ./EDCB/record:/record
