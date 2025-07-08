@@ -14,7 +14,7 @@ WORKDIR /tmp
 
 # EDCBのビルド
 # see https://github.com/xtne6f/EDCB/blob/2b714764ff87199995a68efa065f759816c7bcee/Document/HowToBuild.txt#%E3%83%93%E3%83%AB%E3%83%89linux
-RUN git clone --branch work-plus-s-250531 --depth=1 \
+RUN git clone --branch work-plus-s-250531 --depth 1 \
     https://github.com/xtne6f/EDCB.git \
     && cd ./EDCB/Document/Unix \
     && make --jobs="$(nproc)" \
@@ -28,13 +28,13 @@ RUN git clone --branch work-plus-s-250531 --depth=1 \
 
 # EDCB Material WebUIのインストール
 # see https://github.com/EMWUI/EDCB_Material_WebUI/blob/1156dddc12773e14b68ff929e9decb0b5330c636/README.md#%E5%B0%8E%E5%85%A5
-RUN git clone --depth=1 https://github.com/EMWUI/EDCB_Material_WebUI.git \
+RUN git clone --depth 1 https://github.com/EMWUI/EDCB_Material_WebUI.git \
     && cp --recursive ./EDCB_Material_WebUI/HttpPublic ./EDCB_Material_WebUI/Setting \
         /var/local/edcb/
 
 # BonDriver_LinuxMirakcのビルド
 # see https://github.com/matching/BonDriver_LinuxMirakc/blob/cfbefc6d21dab4009db5f124984c1b720b76d869/README.md#%E3%83%93%E3%83%AB%E3%83%89%E6%96%B9%E6%B3%95
-RUN git clone --depth=1 --recurse-submodules \
+RUN git clone --depth 1 --recurse-submodules \
     https://github.com/matching/BonDriver_LinuxMirakc.git \
     && cd ./BonDriver_LinuxMirakc \
     && make --jobs="$(nproc)" \
