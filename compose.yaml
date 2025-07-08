@@ -55,13 +55,13 @@ services:
       # また、カードリーダーのUSBが物理的に抜けた場合でも、USBを再接続すればコンテナを再起動することなく再認識される。
       - /var/run/pcscd/pcscd.comm:/var/run/pcscd/pcscd.comm
     environment:
-      TZ: "Asia/Tokyo"
-      DISABLE_PCSCD: 1
-      DISABLE_B25_TEST: 1
+      TZ: Asia/Tokyo
+      DISABLE_PCSCD: "1"
+      DISABLE_B25_TEST: "1"
       DOCKER_NETWORK: host
       # for debug
       LOG_LEVEL: "3"
-      DEBUG: "true"
+      DEBUG: true
     network_mode: host
     restart: always
     logging:
