@@ -3,9 +3,7 @@ FROM buildpack-deps:bookworm AS builder
 # ビルド環境構築
 # see https://github.com/xtne6f/EDCB/blob/2b714764ff87199995a68efa065f759816c7bcee/Document/HowToBuild.txt#%E3%83%93%E3%83%AB%E3%83%89linux
 # see https://github.com/matching/BonDriver_LinuxMirakc/blob/cfbefc6d21dab4009db5f124984c1b720b76d869/README.md#%E3%83%93%E3%83%AB%E3%83%89%E6%96%B9%E6%B3%95
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    apt-get update \
+RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
         git \
         make gcc g++ \
@@ -47,9 +45,7 @@ RUN git clone --depth=1 --recurse-submodules \
 FROM debian:bookworm-slim AS runtime
 
 # ランタイム依存関係のみインストール
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    apt-get update \
+RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
     liblua5.2-dev \
     lua-zlib \
