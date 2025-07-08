@@ -47,12 +47,19 @@ services:
       - SYS_NICE
     device_cgroup_rules:
       - 'c *:* rmw'
-    ports:
-      - "40772:40772"
-      - "9229:9229"
+    network_mode: host
     volumes:
       - ./mirakurun/conf:/app-config
       - ./mirakurun/data:/app-data
+      # Note: Mirakurun公式のdocker-compose.ymlでは /var/run と /opt もホストと共有されている
+      #       see https://github.com/Chinachu/Mirakurun/blob/61c4155d2535c56fbf6fd379c5e8aba779fd642b/docker/docker-compose.yml#L41-L42
+      #       しかし、実際に運用する上でこれらのディレクトリに有用なファイルは記録されているようには見えない。
+      #       いちおう公式に従っておくものの、マウントしなくても良いのかもしれない。
+      - ./mirakurun/run:/var/run
+      - ./mirakurun/opt:/opt
+      # ホストのpcscdを使う。これにより、ホストのpcscd.socketを止める必要がなくなる。
+      # また、カードリーダーのUSBが物理的に抜けた場合でも、USBを再接続すればコンテナを再起動することなく再認識される。
+      - /var/run/pcscd/pcscd.comm:/var/run/pcscd/pcscd.comm
     environment:
       TZ: "Asia/Tokyo"
       DISABLE_PCSCD: 1
@@ -62,11 +69,17 @@ services:
       LOG_LEVEL: "3"
       DEBUG: "true"
     devices:
+      # /dev/bus は必須。これがなければチューナーが認識されない
       - /dev/bus:/dev/bus
+      # 以下、チューナーのデバイスファイル
       - /dev/px4video0:/dev/px4video0
       - /dev/px4video1:/dev/px4video1
       - /dev/px4video2:/dev/px4video2
       - /dev/px4video3:/dev/px4video3
+      - /dev/px4video4:/dev/px4video4
+      - /dev/px4video5:/dev/px4video5
+      - /dev/px4video6:/dev/px4video6
+      - /dev/px4video7:/dev/px4video7
     tmpfs:
       - /tmp
     restart: always
