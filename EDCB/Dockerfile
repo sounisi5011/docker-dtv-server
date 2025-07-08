@@ -1,7 +1,7 @@
 FROM debian:bookworm-slim AS builder
 
 # ビルド環境構築
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install --assume-yes --no-install-recommends \
     git \
     make \
     gcc \
@@ -46,7 +46,7 @@ RUN make -j "$(nproc)" && \
 FROM debian:bookworm-slim AS runtime
 
 # ランタイム依存関係のみインストール
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install --assume-yes --no-install-recommends \
     liblua5.2-dev \
     lua-zlib \
     ffmpeg \

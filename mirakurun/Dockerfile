@@ -15,4 +15,4 @@ WORKDIR /app
 # recisdb.debをMirakurunのDockerイメージ内へコピー
 COPY --from=download-recisdb /app/recisdb.deb /tmp
 # recisdbのインストール
-RUN apt-get install -y --no-install-recommends /tmp/recisdb.deb && rm /tmp/recisdb.deb
+RUN apt-get install --assume-yes --no-install-recommends /tmp/recisdb.deb && rm /tmp/recisdb.deb

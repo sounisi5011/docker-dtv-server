@@ -12,7 +12,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     wget --no-verbose https://github.com/kazuki0824/recisdb-rs/releases/download/1.2.3/recisdb_1.2.3-1_arm64.deb -O ./recisdb.deb \
-    && apt-get install -y --no-install-recommends /tmp/recisdb.deb \
+    && apt-get install --assume-yes --no-install-recommends /tmp/recisdb.deb \
     && rm /tmp/recisdb.deb
 
 # isdb-scannerのインストール
