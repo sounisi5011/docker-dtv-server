@@ -6,7 +6,7 @@
 #       かつ、動的なapt-getコマンド実行を避けることでDockerイメージのビルド時間を高速化する。
 FROM buildpack-deps:bookworm-curl AS download-recisdb
 WORKDIR /app
-RUN wget https://github.com/kazuki0824/recisdb-rs/releases/download/1.2.3/recisdb_1.2.3-1_arm64.deb -O ./recisdb.deb
+RUN wget --no-verbose https://github.com/kazuki0824/recisdb-rs/releases/download/1.2.3/recisdb_1.2.3-1_arm64.deb -O ./recisdb.deb
 
 # MirakurunのDockerイメージを起動
 # digestでDockerイメージのバージョンを固定: chinachu/mirakurun:4.0.0-beta.18
@@ -15,4 +15,4 @@ WORKDIR /app
 # recisdb.debをMirakurunのDockerイメージ内へコピー
 COPY --from=download-recisdb /app/recisdb.deb /tmp
 # recisdbのインストール
-RUN apt-get install -y /tmp/recisdb.deb && rm /tmp/recisdb.deb
+RUN apt-get install -y --no-install-recommends /tmp/recisdb.deb && rm /tmp/recisdb.deb
