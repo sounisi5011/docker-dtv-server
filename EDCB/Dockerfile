@@ -24,7 +24,9 @@ RUN git clone --branch work-plus-s-250531 --depth 1 \
     && mkdir --parents /var/local/edcb \
     && make setup_ini \
     && sed --in-place 's/^ALLOW_SETTING=.*/ALLOW_SETTING=true/' \
-        /var/local/edcb/HttpPublic/legacy/util.lua
+        /var/local/edcb/HttpPublic/legacy/util.lua \
+    && sed --in-place '/^HttpAccessControlList=/ { s|$|,+192.168.0.0/16| }' \
+        /var/local/edcb/EpgTimerSrv.ini
 
 # EDCB Material WebUIのインストール
 # see https://github.com/EMWUI/EDCB_Material_WebUI/blob/1156dddc12773e14b68ff929e9decb0b5330c636/README.md#%E5%B0%8E%E5%85%A5
