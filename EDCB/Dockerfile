@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim AS builder
+FROM buildpack-deps:bookworm AS builder
 
 # ビルド環境構築
 # see https://github.com/xtne6f/EDCB/blob/2b714764ff87199995a68efa065f759816c7bcee/Document/HowToBuild.txt#%E3%83%93%E3%83%AB%E3%83%89linux
