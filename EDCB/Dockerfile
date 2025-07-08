@@ -9,27 +9,27 @@ RUN apt-get update \
         make gcc g++ \
         liblua5.2-dev lua-zlib \
         curl ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+    && rm --recursive --force /var/lib/apt/lists/*
 WORKDIR /tmp
 
 # EDCBのビルド
 # see https://github.com/xtne6f/EDCB/blob/2b714764ff87199995a68efa065f759816c7bcee/Document/HowToBuild.txt#%E3%83%93%E3%83%AB%E3%83%89linux
-RUN git clone -b work-plus-s-250531 --depth=1 \
+RUN git clone --branch work-plus-s-250531 --depth=1 \
     https://github.com/xtne6f/EDCB.git \
     && cd ./EDCB/Document/Unix \
-    && make -j "$(nproc)" \
+    && make --jobs="$(nproc)" \
     && make install \
-    && make extra -j "$(nproc)" \
+    && make extra --jobs="$(nproc)" \
     && make install_extra \
-    && mkdir -p /var/local/edcb \
+    && mkdir --parents /var/local/edcb \
     && make setup_ini \
-    && sed -i 's/^ALLOW_SETTING=.*/ALLOW_SETTING=true/' \
+    && sed --in-place 's/^ALLOW_SETTING=.*/ALLOW_SETTING=true/' \
         /var/local/edcb/HttpPublic/legacy/util.lua
 
 # EDCB Material WebUIのインストール
 # see https://github.com/EMWUI/EDCB_Material_WebUI/blob/1156dddc12773e14b68ff929e9decb0b5330c636/README.md#%E5%B0%8E%E5%85%A5
 RUN git clone --depth=1 https://github.com/EMWUI/EDCB_Material_WebUI.git \
-    && cp -r ./EDCB_Material_WebUI/HttpPublic ./EDCB_Material_WebUI/Setting \
+    && cp --recursive ./EDCB_Material_WebUI/HttpPublic ./EDCB_Material_WebUI/Setting \
         /var/local/edcb/
 
 # BonDriver_LinuxMirakcのビルド
@@ -37,7 +37,7 @@ RUN git clone --depth=1 https://github.com/EMWUI/EDCB_Material_WebUI.git \
 RUN git clone --depth=1 --recurse-submodules \
     https://github.com/matching/BonDriver_LinuxMirakc.git \
     && cd ./BonDriver_LinuxMirakc \
-    && make -j "$(nproc)" \
+    && make --jobs="$(nproc)" \
     && cp BonDriver_LinuxMirakc.so /usr/local/lib/edcb/ \
     && cp BonDriver_LinuxMirakc.so.ini_sample \
         /usr/local/lib/edcb/BonDriver_LinuxMirakc.so.ini
@@ -49,12 +49,12 @@ RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
     liblua5.2-dev \
     lua-zlib \
-    && rm -rf /var/lib/apt/lists/*
+    && rm --recursive --force /var/lib/apt/lists/*
 
 # ビルドステージから必要なファイルをコピー
 COPY --from=builder /usr/local/bin/ /usr/local/bin/
 COPY --from=builder /usr/local/lib/edcb/ /usr/local/lib/edcb/
-RUN mkdir -p /var/local/edcb \
+RUN mkdir --parents /var/local/edcb \
     && chmod 777 /var/local/edcb
 COPY --from=builder /var/local/edcb/ /var/local/edcb/
 
