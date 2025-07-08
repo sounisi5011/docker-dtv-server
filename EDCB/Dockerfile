@@ -61,7 +61,6 @@ COPY --from=builder /var/local/edcb/ /var/local/edcb/
 WORKDIR /var/local/edcb
 
 # entrypoint.shをコピーして実行権限付与
-COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+COPY --chmod=755 ./entrypoint.sh /usr/local/bin/entrypoint.sh
 
 CMD [ "/usr/local/bin/entrypoint.sh" ]
