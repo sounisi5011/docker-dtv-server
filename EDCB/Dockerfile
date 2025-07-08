@@ -60,7 +60,4 @@ COPY --from=builder /var/local/edcb/ /var/local/edcb/
 # デバッグ用に移動しておく
 WORKDIR /var/local/edcb
 
-# entrypoint.shをコピーして実行権限付与
-COPY --chmod=755 ./entrypoint.sh /usr/local/bin/entrypoint.sh
-
-CMD [ "/usr/local/bin/entrypoint.sh" ]
+CMD [ "/usr/local/bin/EpgTimerSrv" ]

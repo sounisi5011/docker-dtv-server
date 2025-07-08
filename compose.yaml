@@ -121,6 +121,7 @@ services:
     depends_on:
       - mirakurun
     network_mode: host
+    command: /usr/local/bin/EpgDataCap_Bon -d BonDriver_LinuxMirakc.so -chscan
     volumes:
       - type: bind
         source: "./EDCB/edcb/Common.ini"
@@ -147,7 +148,6 @@ services:
         condition: service_completed_successfully
     restart: always
     network_mode: host
-    command: /usr/local/bin/EpgTimerSrv
     volumes:
       - type: bind
         source: "./EDCB/edcb/Common.ini"
