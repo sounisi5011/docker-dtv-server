@@ -76,13 +76,18 @@ services:
       driver: journald
       options:
         tag: dtv-mirakurun
+    # 削除してもMirakurunは正常に稼働しているように見える。
+    # 何のためにある設定値なのか不明。念の為に公式に従う。
     cap_add:
       - SYS_ADMIN
       - SYS_NICE
+    # 削除してもMirakurunは正常に稼働しているように見える。
+    # おそらくコンテナ内のpcscdを使うために必要。念の為に公式に従う。
     device_cgroup_rules:
       - 'c *:* rmw'
     devices:
-      # /dev/bus は必須。これがなければチューナーが認識されない
+      # ISDBScannerとは異なり、削除してもチューナーは認識され、Mirakurunも正常に稼働しているように見える。
+      # おそらく省略可能だが、念の為に公式に従う。
       - /dev/bus:/dev/bus
       # 以下、チューナーのデバイスファイル
       - /dev/px4video0:/dev/px4video0
