@@ -22,5 +22,4 @@ RUN wget --no-verbose https://github.com/tsukumijima/ISDBScanner/releases/downlo
 # entrypoint.shをコンテナ内にコピー
 COPY --chmod=755 ./entrypoint.sh /usr/local/bin/entrypoint.sh
 
-WORKDIR /tmp
 CMD [ "/usr/local/bin/entrypoint.sh" ]
