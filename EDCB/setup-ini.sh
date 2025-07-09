@@ -15,14 +15,18 @@ readonly DEST_DIR="${1%/}"
 # Note: 生成された各種iniファイルを確認した限りではUTF-8 LFテキストだったため、おそらくこの書き込み方法で問題はないはず。
 #       とはいえ、EDCBのソースコードを確認できていないため確証はない。
 #       ChSet4.txtとChSet5.txtはUTF-8 with BOM LFであり、iniファイルと同じではない。不安は残る。
-# TODO: チューナー数は実際の設定値を元に自動取得するのが望ましい
+readonly TUNER_COUNT_FILEPATH="${DEST_DIR}/Setting/.tuner_count.txt"
+TUNER_COUNT="$(cat "${TUNER_COUNT_FILEPATH}")"
+readonly TUNER_COUNT
 cat << END_OF_INI >> /var/local/edcb/EpgTimerSrv.ini
 [BonDriver_LinuxMirakc.so]
-Count=4
+Count=${TUNER_COUNT}
 GetEpg=1
 EPGCount=0
 Priority=0
 END_OF_INI
+# EDCBへの副作用を減らすため、チューナー数記録ファイルを削除
+rm "${TUNER_COUNT_FILEPATH}"
 
 for filename in 'Common.ini' 'EpgDataCap_Bon.ini' 'EpgTimerSrv.ini'; do
   src_filepath="/var/local/edcb/${filename}"

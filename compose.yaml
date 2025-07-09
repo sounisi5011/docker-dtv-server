@@ -125,6 +125,9 @@ services:
     build:
       context: ./EDCB
     container_name: PrepareEDCB-CreateConfigFiles
+    depends_on:
+      auto_gen_config:
+        condition: service_completed_successfully
     volumes:
       - ./EDCB/edcb:/var/local/host_data/edcb
     # /var/local/edcb/ディレクトリ内から/var/local/host_data/edcbディレクトリへ設定ファイルをコピーする
