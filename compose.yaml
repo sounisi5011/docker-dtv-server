@@ -161,7 +161,6 @@ services:
       - ./EDCB/edcb/EpgTimerSrv.ini:/var/local/edcb/EpgTimerSrv.ini
       - ./EDCB/edcb/Setting:/var/local/edcb/Setting
     network_mode: host
-    command: /usr/local/bin/EpgDataCap_Bon -d BonDriver_LinuxMirakc.so -chscan
     # このコンテナは常にローカルのDockerfileに基づいて作成されるため、
     # コンテナイメージのpullを常に許可しない。
     pull_policy: never
@@ -189,6 +188,7 @@ services:
       - ./EDCB/edcb/Setting:/var/local/edcb/Setting
       - ./EDCB/record:/record
     network_mode: host
+    command: /usr/local/bin/EpgTimerSrv
     restart: always
     logging:
       # ログはjournaldで記録する

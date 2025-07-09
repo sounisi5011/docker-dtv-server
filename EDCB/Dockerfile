@@ -69,4 +69,7 @@ COPY --chmod=755 ./setup-ini.sh /usr/local/bin/setup-ini.sh
 # デバッグ用に移動しておく
 WORKDIR /var/local/edcb
 
-CMD [ "/usr/local/bin/EpgTimerSrv" ]
+# entrypoint.shをコピーして実行権限付与
+COPY --chmod=755 ./entrypoint.sh /usr/local/bin/entrypoint.sh
+
+CMD [ "/usr/local/bin/entrypoint.sh" ]
