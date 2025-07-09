@@ -141,30 +141,6 @@ services:
     # コンテナイメージのpullを常に許可しない。
     pull_policy: never
 
-  edcb_chscan:
-    image:
-      # このコンテナは常にローカルのDockerfileに基づいて作成されるため、コンテナイメージをpullすることはない。
-      # しかしimageがなければ、`docker image`コマンドや`docker ps`コマンドでは自動生成されたコンテナイメージ名が使用される。
-      # よって、pull_policyでpullを禁止しつつ、imageも併用する。
-      edcb
-    build:
-      context: ./EDCB
-    container_name: PrepareEDCB-ChScan
-    depends_on:
-      edcb_create_config:
-        condition: service_completed_successfully
-      mirakurun:
-        condition: service_started
-    volumes:
-      - ./EDCB/edcb/Common.ini:/var/local/edcb/Common.ini
-      - ./EDCB/edcb/EpgDataCap_Bon.ini:/var/local/edcb/EpgDataCap_Bon.ini
-      - ./EDCB/edcb/EpgTimerSrv.ini:/var/local/edcb/EpgTimerSrv.ini
-      - ./EDCB/edcb/Setting:/var/local/edcb/Setting
-    network_mode: host
-    # このコンテナは常にローカルのDockerfileに基づいて作成されるため、
-    # コンテナイメージのpullを常に許可しない。
-    pull_policy: never
-
   edcb:
     image:
       # このコンテナは常にローカルのDockerfileに基づいて作成されるため、コンテナイメージをpullすることはない。
@@ -175,8 +151,6 @@ services:
       context: ./EDCB
     container_name: EDCB
     depends_on:
-      edcb_chscan:
-        condition: service_completed_successfully
       edcb_create_config:
         condition: service_completed_successfully
       mirakurun:
@@ -188,7 +162,6 @@ services:
       - ./EDCB/edcb/Setting:/var/local/edcb/Setting
       - ./EDCB/record:/record
     network_mode: host
-    command: /usr/local/bin/EpgTimerSrv
     restart: always
     logging:
       # ログはjournaldで記録する
