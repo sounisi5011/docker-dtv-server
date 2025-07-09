@@ -17,9 +17,9 @@ WORKDIR /tmp
 RUN git clone --branch work-plus-s-250531 --depth 1 \
         https://github.com/xtne6f/EDCB.git ./EDCB \
     && cd ./EDCB/Document/Unix \
-    && make --jobs="$(nproc)" \
+    && make --jobs="$(nproc --all)" \
     && make install \
-    && make extra --jobs="$(nproc)" \
+    && make extra --jobs="$(nproc --all)" \
     && make install_extra \
     && mkdir --parents /var/local/edcb \
     && make setup_ini \
@@ -44,7 +44,7 @@ RUN git clone --depth 1 https://github.com/EMWUI/EDCB_Material_WebUI.git ./EDCB_
 RUN git clone --depth 1 --recurse-submodules \
         https://github.com/matching/BonDriver_LinuxMirakc.git ./BonDriver_LinuxMirakc \
     && cd ./BonDriver_LinuxMirakc \
-    && make --jobs="$(nproc)" \
+    && make --jobs="$(nproc --all)" \
     && cp ./BonDriver_LinuxMirakc.so /usr/local/lib/edcb/ \
     && cp ./BonDriver_LinuxMirakc.so.ini_sample \
         /usr/local/lib/edcb/BonDriver_LinuxMirakc.so.ini
