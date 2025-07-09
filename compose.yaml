@@ -124,6 +124,9 @@ services:
     command: /usr/local/bin/setup-ini.sh /var/local/host_data/edcb
     volumes:
       - ./EDCB/edcb:/var/local/host_data/edcb
+    # このコンテナは常にローカルのDockerfileに基づいて作成されるため、
+    # コンテナイメージのpullを常に許可しない。
+    pull_policy: never
 
   edcb_chscan:
     image: edcb
@@ -142,6 +145,9 @@ services:
       - ./EDCB/edcb/EpgDataCap_Bon.ini:/var/local/edcb/EpgDataCap_Bon.ini
       - ./EDCB/edcb/EpgTimerSrv.ini:/var/local/edcb/EpgTimerSrv.ini
       - ./EDCB/edcb/Setting:/var/local/edcb/Setting
+    # このコンテナは常にローカルのDockerfileに基づいて作成されるため、
+    # コンテナイメージのpullを常に許可しない。
+    pull_policy: never
 
   edcb:
     image: edcb
@@ -163,3 +169,6 @@ services:
       - ./EDCB/edcb/EpgTimerSrv.ini:/var/local/edcb/EpgTimerSrv.ini
       - ./EDCB/edcb/Setting:/var/local/edcb/Setting
       - ./EDCB/record:/record
+    # このコンテナは常にローカルのDockerfileに基づいて作成されるため、
+    # コンテナイメージのpullを常に許可しない。
+    pull_policy: never
