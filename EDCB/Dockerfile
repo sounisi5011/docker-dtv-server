@@ -27,6 +27,11 @@ RUN git clone --branch work-plus-s-250531 --depth 1 \
         /var/local/edcb/HttpPublic/legacy/util.lua \
     && sed --in-place '/^HttpAccessControlList=/ { s|$|,+192.168.0.0/16| }' \
         /var/local/edcb/EpgTimerSrv.ini
+# 録画保存フォルダを`/record`に設定したCommon.iniを作成
+# Note: work-plus-s-250531時点のEDCBでは、`make setup_ini`コマンドはCommon.iniファイルを作成していない。
+#       このため直接コピーして作成している。
+#       see https://github.com/xtne6f/EDCB/blob/2b714764ff87199995a68efa065f759816c7bcee/Document/Unix/Makefile#L73-L83
+COPY ./ini.template/Common.ini /var/local/edcb/Common.ini
 
 # EDCB Material WebUIのインストール
 # see https://github.com/EMWUI/EDCB_Material_WebUI/blob/1156dddc12773e14b68ff929e9decb0b5330c636/README.md#%E5%B0%8E%E5%85%A5
