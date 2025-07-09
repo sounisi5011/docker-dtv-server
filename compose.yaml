@@ -118,7 +118,7 @@ services:
   #       この挙動を回避するため、ホストとコンテナで共有するべき設定ファイルを予めホスト側に作成しておく。
   edcb_create_config:
     image: edcb
-    container_name: EDCB.CreateConfigFiles
+    container_name: PrepareEDCB-CreateConfigFiles
     build:
       context: ./EDCB
     command: /usr/local/bin/setup-ini.sh /var/local/host_data/edcb
@@ -130,7 +130,7 @@ services:
 
   edcb_chscan:
     image: edcb
-    container_name: EDCB_ChScan
+    container_name: PrepareEDCB-ChScan
     build:
       context: ./EDCB
     depends_on:
