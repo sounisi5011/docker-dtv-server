@@ -122,9 +122,11 @@ services:
       # しかしimageがなければ、`docker image`コマンドや`docker ps`コマンドでは自動生成されたコンテナイメージ名が使用される。
       # よって、pull_policyでpullを禁止しつつ、imageも併用する。
       edcb
-    container_name: PrepareEDCB-CreateConfigFiles
     build:
       context: ./EDCB
+    container_name: PrepareEDCB-CreateConfigFiles
+    volumes:
+      - ./EDCB/edcb:/var/local/host_data/edcb
     # /var/local/edcb/ディレクトリ内から/var/local/host_data/edcbディレクトリへ設定ファイルをコピーする
     # Note: コンテナ内の/var/local/edcb/ディレクトリには他の設定ファイルも含まれているが、ホストと共有するのは一部のみ。
     #       よって/var/local/edcb/ディレクトリそのものをホストと共有することはできない。
@@ -132,8 +134,6 @@ services:
     #       そこへ/var/local/edcb/から設定ファイルをコピーすることで
     #       必要な設定ファイルのみをホスト側に作成する。
     command: /usr/local/bin/setup-ini.sh /var/local/host_data/edcb
-    volumes:
-      - ./EDCB/edcb:/var/local/host_data/edcb
     # このコンテナは常にローカルのDockerfileに基づいて作成されるため、
     # コンテナイメージのpullを常に許可しない。
     pull_policy: never
@@ -144,21 +144,21 @@ services:
       # しかしimageがなければ、`docker image`コマンドや`docker ps`コマンドでは自動生成されたコンテナイメージ名が使用される。
       # よって、pull_policyでpullを禁止しつつ、imageも併用する。
       edcb
-    container_name: PrepareEDCB-ChScan
     build:
       context: ./EDCB
+    container_name: PrepareEDCB-ChScan
     depends_on:
-      mirakurun:
-        condition: service_started
       edcb_create_config:
         condition: service_completed_successfully
-    network_mode: host
-    command: /usr/local/bin/EpgDataCap_Bon -d BonDriver_LinuxMirakc.so -chscan
+      mirakurun:
+        condition: service_started
     volumes:
       - ./EDCB/edcb/Common.ini:/var/local/edcb/Common.ini
       - ./EDCB/edcb/EpgDataCap_Bon.ini:/var/local/edcb/EpgDataCap_Bon.ini
       - ./EDCB/edcb/EpgTimerSrv.ini:/var/local/edcb/EpgTimerSrv.ini
       - ./EDCB/edcb/Setting:/var/local/edcb/Setting
+    network_mode: host
+    command: /usr/local/bin/EpgDataCap_Bon -d BonDriver_LinuxMirakc.so -chscan
     # このコンテナは常にローカルのDockerfileに基づいて作成されるため、
     # コンテナイメージのpullを常に許可しない。
     pull_policy: never
@@ -169,24 +169,24 @@ services:
       # しかしimageがなければ、`docker image`コマンドや`docker ps`コマンドでは自動生成されたコンテナイメージ名が使用される。
       # よって、pull_policyでpullを禁止しつつ、imageも併用する。
       edcb
-    container_name: EDCB
     build:
       context: ./EDCB
+    container_name: EDCB
     depends_on:
-      mirakurun:
-        condition: service_started
-      edcb_create_config:
-        condition: service_completed_successfully
       edcb_chscan:
         condition: service_completed_successfully
-    restart: always
-    network_mode: host
+      edcb_create_config:
+        condition: service_completed_successfully
+      mirakurun:
+        condition: service_started
     volumes:
       - ./EDCB/edcb/Common.ini:/var/local/edcb/Common.ini
       - ./EDCB/edcb/EpgDataCap_Bon.ini:/var/local/edcb/EpgDataCap_Bon.ini
       - ./EDCB/edcb/EpgTimerSrv.ini:/var/local/edcb/EpgTimerSrv.ini
       - ./EDCB/edcb/Setting:/var/local/edcb/Setting
       - ./EDCB/record:/record
+    network_mode: host
+    restart: always
     # このコンテナは常にローカルのDockerfileに基づいて作成されるため、
     # コンテナイメージのpullを常に許可しない。
     pull_policy: never
