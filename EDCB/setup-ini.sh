@@ -8,6 +8,22 @@ set -euo pipefail
 
 readonly DEST_DIR="${1%/}"
 
+# EDCBの使用チューナー数をあらかじめ設定
+# この設定を追記することで、EDCBが起動した直後からEPG取得を開始できる。
+# 事前設定しない場合、Web UIから設定を変更した後にEDCBを再起動する必要がある。
+# see https://github.com/xtne6f/EDCB/blob/2b714764ff87199995a68efa065f759816c7bcee/Document/Readme.txt#L84-L86
+# Note: 生成された各種iniファイルを確認した限りではUTF-8 LFテキストだったため、おそらくこの書き込み方法で問題はないはず。
+#       とはいえ、EDCBのソースコードを確認できていないため確証はない。
+#       ChSet4.txtとChSet5.txtはUTF-8 with BOM LFであり、iniファイルと同じではない。不安は残る。
+# TODO: チューナー数は実際の設定値を元に自動取得するのが望ましい
+cat << END_OF_INI >> /var/local/edcb/EpgTimerSrv.ini
+[BonDriver_LinuxMirakc.so]
+Count=4
+GetEpg=1
+EPGCount=0
+Priority=0
+END_OF_INI
+
 for filename in 'Common.ini' 'EpgDataCap_Bon.ini' 'EpgTimerSrv.ini'; do
   src_filepath="/var/local/edcb/${filename}"
   dest_filepath="${DEST_DIR}/${filename}"
