@@ -117,10 +117,20 @@ services:
   # Note: 宛先パスが存在しない場合、Dockerはマウント時にファイルがあるべきパスにディレクトリを作成してしまう。
   #       この挙動を回避するため、ホストとコンテナで共有するべき設定ファイルを予めホスト側に作成しておく。
   edcb_create_config:
-    image: edcb
+    image:
+      # このコンテナは常にローカルのDockerfileに基づいて作成されるため、コンテナイメージをpullすることはない。
+      # しかしimageがなければ、`docker image`コマンドや`docker ps`コマンドでは自動生成されたコンテナイメージ名が使用される。
+      # よって、pull_policyでpullを禁止しつつ、imageも併用する。
+      edcb
     container_name: PrepareEDCB-CreateConfigFiles
     build:
       context: ./EDCB
+    # /var/local/edcb/ディレクトリ内から/var/local/host_data/edcbディレクトリへ設定ファイルをコピーする
+    # Note: コンテナ内の/var/local/edcb/ディレクトリには他の設定ファイルも含まれているが、ホストと共有するのは一部のみ。
+    #       よって/var/local/edcb/ディレクトリそのものをホストと共有することはできない。
+    #       そのため、一旦ホスト側のディレクトリを別の場所（/var/local/host_data/edcb）にマウントし、
+    #       そこへ/var/local/edcb/から設定ファイルをコピーすることで
+    #       必要な設定ファイルのみをホスト側に作成する。
     command: /usr/local/bin/setup-ini.sh /var/local/host_data/edcb
     volumes:
       - ./EDCB/edcb:/var/local/host_data/edcb
@@ -129,7 +139,11 @@ services:
     pull_policy: never
 
   edcb_chscan:
-    image: edcb
+    image:
+      # このコンテナは常にローカルのDockerfileに基づいて作成されるため、コンテナイメージをpullすることはない。
+      # しかしimageがなければ、`docker image`コマンドや`docker ps`コマンドでは自動生成されたコンテナイメージ名が使用される。
+      # よって、pull_policyでpullを禁止しつつ、imageも併用する。
+      edcb
     container_name: PrepareEDCB-ChScan
     build:
       context: ./EDCB
@@ -150,7 +164,11 @@ services:
     pull_policy: never
 
   edcb:
-    image: edcb
+    image:
+      # このコンテナは常にローカルのDockerfileに基づいて作成されるため、コンテナイメージをpullすることはない。
+      # しかしimageがなければ、`docker image`コマンドや`docker ps`コマンドでは自動生成されたコンテナイメージ名が使用される。
+      # よって、pull_policyでpullを禁止しつつ、imageも併用する。
+      edcb
     container_name: EDCB
     build:
       context: ./EDCB
