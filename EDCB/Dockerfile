@@ -60,9 +60,8 @@ RUN apt-get update \
 # ビルドステージから必要なファイルをコピー
 COPY --from=builder /usr/local/bin/ /usr/local/bin/
 COPY --from=builder /usr/local/lib/edcb/ /usr/local/lib/edcb/
-RUN mkdir --parents /var/local/edcb \
-    && chmod 777 /var/local/edcb
 COPY --from=builder /var/local/edcb/ /var/local/edcb/
+RUN chmod 777 /var/local/edcb
 
 # setup-ini.shをコピーして実行権限付与
 COPY --chmod=755 ./setup-ini.sh /usr/local/bin/setup-ini.sh
