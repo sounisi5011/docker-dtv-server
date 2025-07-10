@@ -57,16 +57,6 @@ Dockerで構築する[Mirakurun] + [EDCB]構成のTV録画環境
 
 ### インストール
 
-EDCB用に`EDCB/edcb`ディレクトリ以下に`Common.ini`、`EpgDataCap_Bon.ini`、`EpgTimerSrv.ini`を作成する。`EpgTimerSrv.ini`の以下の項目は使用するチューナーに合わせて変更すること。
-
-```ini
-[BonDriver_LinuxMirakc.so]
-Count=4     # チューナー数
-GetEpg=1
-EPGCount=2  # EPG取得に使用するチューナー数
-Priority=0
-```
-
 デフォルトの録画保存先ディレクトリは`EDCB/record`。必要に応じて`compose.yaml`のedcbサービスのボリューム設定を変更すること。
 
 ```yaml
@@ -81,11 +71,7 @@ Priority=0
 docker compose up -d
 ```
 
-最初にチューナースキャン用のコンテナが立ち上がり、続いてMirakurun、EDCBチャンネルスキャン用のコンテナ、最後にEDCBが立ち上がる。チューナースキャンには7分前後、チャンネルスキャンには3〜4分ほどかかるため、完了するまで待ってからEDCBにアクセスする。チャンネルスキャンが必要ない場合は、次のコマンドでスキップ可能：
-
-```bash
-docker compose up -d --no-deps mirakurun edcb
-```
+最初にチューナースキャン用のコンテナが立ち上がり、続いてMirakurun、EDCB設定ファイル事前作成用のコンテナ、最後にEDCBが立ち上がる。チューナースキャンには7分前後かかるため、完了するまで待ってからEDCBにアクセスする。
 
 ## ライセンス
 
