@@ -60,9 +60,7 @@ Dockerで構築する[Mirakurun] + [EDCB]構成のTV録画環境
 デフォルトの録画保存先ディレクトリは`EDCB/record`。必要に応じて`compose.yaml`のedcbサービスのボリューム設定を変更すること。
 
 ```yaml
-      - type: bind
-        source: "./EDCB/record" # ここを変更
-        target: "/record"
+      - ./EDCB/record:/record # ここを変更
 ```
 
 設定が完了したら、以下のコマンドでDockerイメージをビルドし、コンテナを起動する：
