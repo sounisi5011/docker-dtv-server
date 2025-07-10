@@ -28,6 +28,7 @@ Dockerで構築する[Mirakurun] + [EDCB]構成のTV録画環境
   - `EpgTimerSrv.ini`
     - `HttpAccessControlList`に`+192.168.0.0/16`を追記
     - 実際に検出したチューナー数に基づき、`BonDriver_LinuxMirakc`を利用するための設定を追記
+- [EDCB]の録画保存先ディレクトリを環境変数`DTV_RECORD_DIR_PATH`で定義できるように変更
 - コンテナ起動時の[EDCB]のチャンネルスキャン実行を削除（[ISDBScanner]が生成するため不要と判断）
 - [EDCB]のビルドに使用するベースイメージを`buildpack-deps:bookworm`に変更（Build Cacheの削減）
 - [EDCB]のランタイム依存関係から`ffmpeg`と`ca-certificates`を削除
@@ -57,19 +58,34 @@ Dockerで構築する[Mirakurun] + [EDCB]構成のTV録画環境
 
 ### インストール
 
-デフォルトの録画保存先ディレクトリは`EDCB/record`。必要に応じて`compose.yaml`のedcbサービスのボリューム設定を変更すること。
-
-```yaml
-      - ./EDCB/record:/record # ここを変更
-```
-
-設定が完了したら、以下のコマンドでDockerイメージをビルドし、コンテナを起動する：
+以下のコマンドでDockerイメージをビルドし、コンテナを起動する：
 
 ```bash
 docker compose up -d
 ```
 
 最初にチューナー・チャンネルスキャン用のコンテナが立ち上がり、続いてMirakurun、EDCB設定ファイル事前作成用のコンテナ、最後にEDCBが立ち上がる。チューナースキャンとチャンネルスキャンには7分前後かかるため、完了するまで待ってからEDCBにアクセスする。
+
+デフォルトの録画保存先ディレクトリは`EDCB/record`。環境変数`DTV_RECORD_DIR_PATH`を指定することで変更することができる。
+以下のいずれかの方法を選択（方法2は方法1の設定を上書きする）：
+
+1. `.env`ファイルを`compose.yaml`と同じ階層に作成。
+
+    ```
+    DTV_RECORD_DIR_PATH=/mnt/sda1/record
+    ```
+
+    その後、コンテナを起動する。
+
+    ```bash
+    docker compose up -d
+    ```
+
+2. コンテナの起動時に環境変数`DTV_RECORD_DIR_PATH`を指定する。
+
+    ```bash
+    DTV_RECORD_DIR_PATH=/mnt/sda1/record docker compose up -d
+    ```
 
 ## ライセンス
 

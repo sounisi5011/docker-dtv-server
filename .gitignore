@@ -1,3 +1,5 @@
+.env
+
 /mirakurun/conf/*
 !/mirakurun/conf/.gitkeep
 /mirakurun/data/*

@@ -168,7 +168,7 @@ services:
       - ./EDCB/edcb/EpgDataCap_Bon.ini:/var/local/edcb/EpgDataCap_Bon.ini
       - ./EDCB/edcb/EpgTimerSrv.ini:/var/local/edcb/EpgTimerSrv.ini
       - ./EDCB/edcb/Setting:/var/local/edcb/Setting
-      - ./EDCB/record:/record
+      - ${DTV_RECORD_DIR_PATH:-./EDCB/record}:/record
     network_mode: host
     restart: always
     logging:
