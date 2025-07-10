@@ -24,7 +24,7 @@ Dockerで構築する[Mirakurun] + [EDCB]構成のTV録画環境
 - Dockerのログを[`json-file`](https://docs.docker.com/engine/logging/drivers/json-file/)の代わりに[`journald`](https://docs.docker.com/engine/logging/drivers/journald/)を使って書き込む
 - 初回起動時に[ISDBScanner]や自動起動コンテナを使用して[Mirakurun]および[EDCB]の設定ファイルを自動生成
   - `Common.ini`
-      `/record`を録画保存フォルダとして使用する設定で作成
+    `/record`を録画保存フォルダとして使用する設定で作成
   - `EpgTimerSrv.ini`
     - `HttpAccessControlList`に`+192.168.0.0/16`を追記
     - 実際に検出したチューナー数に基づき、`BonDriver_LinuxMirakc`を利用するための設定を追記
