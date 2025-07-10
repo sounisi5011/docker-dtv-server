@@ -22,7 +22,17 @@ Dockerで構築する[Mirakurun] + [EDCB]構成のTV録画環境
 - [KonomiTV]の導入を止める
 - [recpt1](https://github.com/stz2012/recpt1)および[libaribb25](https://github.com/tsukumijima/libaribb25)の代わりに[recisdb]を使用
 - Dockerのログを[`json-file`](https://docs.docker.com/engine/logging/drivers/json-file/)の代わりに[`journald`](https://docs.docker.com/engine/logging/drivers/journald/)を使って書き込む
-- 初回起動時に[ISDBScanner]を使用して[Mirakurun]および[EDCB]の設定ファイルを自動生成
+- 初回起動時に[ISDBScanner]や自動起動コンテナを使用して[Mirakurun]および[EDCB]の設定ファイルを自動生成
+  - `Common.ini`
+    `/record`を録画保存フォルダとして使用する設定で作成
+  - `EpgTimerSrv.ini`
+    - `HttpAccessControlList`に`+192.168.0.0/16`を追記
+    - 実際に検出したチューナー数に基づき、`BonDriver_LinuxMirakc`を利用するための設定を追記
+- コンテナ起動時の[EDCB]のチャンネルスキャン実行を削除（[ISDBScanner]が生成するため不要と判断）
+- [EDCB]のビルドに使用するベースイメージを`buildpack-deps:bookworm`に変更（Build Cacheの削減）
+- [EDCB]のランタイム依存関係から`ffmpeg`と`ca-certificates`を削除
+- [EDCB]用コンテナで設定ファイルのマウントが失敗していた不具合を修正（[`6e4e254`](https://github.com/sounisi5011/docker-dtv-server/commit/6e4e254563286f5ed62fd30c2b75434698af9d4f)）
+- 各コンテナに[`pull_policy: never`](https://docs.docker.com/reference/compose-file/services/#pull_policy)を追加
 
 [recisdb]: https://github.com/kazuki0824/recisdb-rs
 [ISDBScanner]: https://github.com/tsukumijima/ISDBScanner
