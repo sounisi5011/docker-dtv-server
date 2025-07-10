@@ -23,7 +23,7 @@ Dockerで構築する[Mirakurun] + [EDCB]構成のTV録画環境
 - [recpt1](https://github.com/stz2012/recpt1)および[libaribb25](https://github.com/tsukumijima/libaribb25)の代わりに[recisdb]を使用
 - Dockerのログを[`json-file`](https://docs.docker.com/engine/logging/drivers/json-file/)の代わりに[`journald`](https://docs.docker.com/engine/logging/drivers/journald/)を使って書き込む
 - 初回起動時に[ISDBScanner]や自動起動コンテナを使用して[Mirakurun]および[EDCB]の設定ファイルを自動生成
-  - `Common.ini`
+  - `Common.ini`  
     `/record`を録画保存フォルダとして使用する設定で作成
   - `EpgTimerSrv.ini`
     - `HttpAccessControlList`に`+192.168.0.0/16`を追記
