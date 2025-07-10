@@ -137,6 +137,14 @@ services:
     #       そこへ/var/local/edcb/から設定ファイルをコピーすることで
     #       必要な設定ファイルのみをホスト側に作成する。
     command: /usr/local/bin/setup-ini.sh /var/local/host_data/edcb
+    logging:
+      # ログはjournaldで記録する
+      # デフォルトのjson-fileはログが /var/lib/docker/containers/*/*-json.log ファイルに記録される一方、
+      # journaldの場合はログが /var/log/ 以下に集約されるため、
+      # log2ramやzram-configのような書き込み頻度を抑えてSDカードの寿命を伸ばすソフトウェアが使用しやすい。
+      driver: journald
+      options:
+        tag: dtv-prepare-edcb-create-config
     # このコンテナは常にローカルのDockerfileに基づいて作成されるため、
     # コンテナイメージのpullを常に許可しない。
     pull_policy: never
