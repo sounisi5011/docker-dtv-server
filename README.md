@@ -118,6 +118,17 @@ docker compose up -d --build
     DTV_RECORD_DIR_PATH=/mnt/sda1/record docker compose up -d
     ```
 
+## 設定ファイルやデータファイルなどの配置場所
+
+Mirakurunの設定ファイルやデータファイルは`./mirakurun/`ディレクトリ以下に、EDCBの設定ファイルやデータファイルは`./EDCB/edcb/`ディレクトリ以下に配置される。
+
+作成されたファイルの一覧を確認したい場合は、以下のコマンドを実行することで表示できる。  
+※正確には、`.gitignore`で無視されているファイルの一覧を表示するコマンド。
+
+```bash
+git ls-files -oi --exclude-standard
+```
+
 ## ファイル名変換PlugIn および 出力PlugIn の設定に関わる注意事項
 
 > [!NOTE]
