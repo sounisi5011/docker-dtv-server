@@ -130,6 +130,64 @@ for filename in 'Common.ini' 'EpgDataCap_Bon.ini' 'EpgTimerSrv.ini' \
 
 変更しなければ、コンテナを終了するたびにプラグインの設定が消滅してしまうので注意。
 
+## オススメ設定
+
+この構成では[Mirakurun]および[EDCB]の各種設定ファイルを自動生成しており、必須の設定を書き込んでいる。
+
+だが、必須ではないが推奨される設定項目もある。以下にメモとして書き残しておく。必要であれば手動でファイルを編集すること。
+
+> [!IMPORTANT]
+> EDCBの設定ファイルを自動生成する`PrepareEDCB-CreateConfigFiles`コンテナでは、
+> **既存の設定ファイルが存在しないまたは空の場合に生成**する。
+> 言い換えれば、空ではない設定ファイルの場合はいかなる内容であっても上書きされない。
+> ※`EpgTimerSrv.ini`のチューナー数設定を除く
+>
+> 手動で設定ファイルを編集する場合は、コンテナ起動後に書き込むか、
+> もしくは以下のコマンドを実行した後に編集すること。
+>
+> ```bash
+> docker compose run edcb_create_config
+> ```
+
+### `EDCB/edcb/EpgTimerSrv.ini`
+
+`SaveNotifyLog=1`、`SaveDebugLog=1`、あとはRecName_Macroを使用するための設定をオススメする。
+
+```ini
+[SET]
+; HTTPサーバを有効化。自動生成されるので書き換えなくても可。
+EnableHttpSrv=2
+; HTTPサーバのアクセス制御。自動生成されるので書き換えなくても可。
+HttpAccessControlList=+127.0.0.1,+::1,+::ffff:127.0.0.1,+192.168.0.0/16
+; 情報通知ログの保存を有効化。EDCB/edcb/EpgTimerSrvNotify.logファイルに書き込まれる。
+; トラブル時に確認するため有効化したほうが良いだろう。
+SaveNotifyLog=1
+; デバッグ出力の保存を有効化。EDCB/edcb/EpgTimerSrvDebugLog.txtファイルに書き込まれる。
+; トラブル時に確認するため有効化したほうが良いだろう。
+SaveDebugLog=1
+; 録画時のファイル名にファイル名変換PlugInのRecName_Macro.so（Windows版EDCBにおけるRecName_Macro.dll）を使用。
+; 使用しない場合、録画ファイルのファイル名にはEpgDataCap_Bonの録画ファイル名設定が使われるらしい（未確認）。
+; RecName_Macroはとても便利なので必ず有効化すべし。
+RecNamePlugIn=1
+RecNamePlugInFile=RecName_Macro.so
+; 以下、チューナー数設定。自動生成されるうえにWeb UIからの編集のほうが分かりやすいので書き換えなくても可。
+[BonDriver_LinuxMirakc.so]
+Count=4
+GetEpg=1
+EPGCount=2
+Priority=0
+```
+
+### `RecName_Macro.so.ini`
+
+ファイル名変換PlugInの`RecName_Macro.so`（Windows版EDCBにおける`RecName_Macro.dll`）を使ってどのような録画ファイル名にするかの設定。
+個人的には`20XX-11-21-01-28.放送局名半角英数.[新]番組名半角英数[字][デ].ts`書式を使っている。
+
+```ini
+[SET]
+Macro=$SDYYYY$-$SDMM$-$SDDD$-$STHH$-$STMM$.$ZtoH(ServiceName)$.$ZtoH(Title)$.ts
+```
+
 ## ライセンス
 
 docker-dtv-serverは[fork元]同様MITライセンスのもとで公開
