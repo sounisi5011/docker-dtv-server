@@ -114,6 +114,7 @@ EDCBは`/usr/local/lib/edcb`ディレクトリ直下に置かれた2種類のプ
       #       対応する設定ファイルのパスもここに記載しマウントすること。
       #       EDCB/setup-ini.sh の更新も忘れずに。
       - ./EDCB/edcb/Write_Default.so.ini:/var/local/edcb/Write_Default.so.ini
+...
 ```
 
 また、対応する設定ファイルを（空の内容で良いので）事前に作成するか、もしくは`EDCB/setup-ini.sh`を編集して自動作成するように変更すること。
@@ -139,7 +140,7 @@ for filename in 'Common.ini' 'EpgDataCap_Bon.ini' 'EpgTimerSrv.ini' \
 > [!IMPORTANT]
 > EDCBの設定ファイルを自動生成する`PrepareEDCB-CreateConfigFiles`コンテナでは、
 > **既存の設定ファイルが存在しないまたは空の場合に生成**する。
-> 言い換えれば、空ではない設定ファイルの場合はいかなる内容であっても上書きされない。
+> 言い換えれば、空ではない設定ファイルの場合はいかなる内容であっても上書きされない。  
 > ※`EpgTimerSrv.ini`のチューナー数設定を除く
 >
 > 手動で設定ファイルを編集する場合は、コンテナ起動後に書き込むか、
