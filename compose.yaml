@@ -7,7 +7,7 @@ services:
       isdb-scanner
     build:
       context: ./autogen-config-with-isdb-scanner
-    container_name: auto-gen-config.ISDBScanner
+    container_name: PrepareDTV-ScanTunersAndChannels
     volumes:
       # ホストのpcscdを使う。これにより、ホストのpcscd.socketを止める必要がなくなる。
       # また、カードリーダーのUSBが物理的に抜けた場合でも、USBを再接続すればコンテナを再起動することなく再認識される。
