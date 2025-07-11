@@ -24,6 +24,8 @@ Dockerで構築する[Mirakurun] + [EDCB]構成のTV録画環境
 ## fork元からの変更点
 
 - [KonomiTV]の導入を止める
+- ホストのpcscdを使う
+  - `/var/run/pcscd/pcscd.comm`が存在しない場合は、コンテナの起動そのものを禁止する
 - [recpt1](https://github.com/stz2012/recpt1)および[libaribb25](https://github.com/tsukumijima/libaribb25)の代わりに[recisdb]を使用
 - Dockerのログを[`json-file`](https://docs.docker.com/engine/logging/drivers/json-file/)の代わりに[`journald`](https://docs.docker.com/engine/logging/drivers/journald/)を使って書き込む
 - 初回起動時に[ISDBScanner]や自動起動コンテナを使用して[Mirakurun]および[EDCB]の設定ファイルを自動生成
@@ -58,6 +60,7 @@ Dockerで構築する[Mirakurun] + [EDCB]構成のTV録画環境
 
 - ホストマシン上に以下のものが必要：
   - Docker
+  - pcscd
   - px4_drvなどのチューナードライバ
 - ホストOSは[Raspberry Pi OS Lite (bookworm)](https://www.raspberrypi.com/software/operating-systems/#raspberry-pi-os-64-bit)を想定
 

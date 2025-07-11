@@ -6,7 +6,12 @@ services:
     volumes:
       # ホストのpcscdを使う。これにより、ホストのpcscd.socketを止める必要がなくなる。
       # また、カードリーダーのUSBが物理的に抜けた場合でも、USBを再接続すればコンテナを再起動することなく再認識される。
-      - /var/run/pcscd/pcscd.comm:/var/run/pcscd/pcscd.comm
+      - type: bind
+        source: /var/run/pcscd/pcscd.comm
+        target: /var/run/pcscd/pcscd.comm
+        read_only: true
+        bind:
+          create_host_path: false
       # MirakurunおよびEDCBの設定ファイル格納ディレクトリをマウント
       - ./mirakurun/conf:/mirakurun-config
       - ./EDCB/edcb/Setting:/edcb-setting
@@ -64,7 +69,12 @@ services:
       - ./mirakurun/opt:/opt
       # ホストのpcscdを使う。これにより、ホストのpcscd.socketを止める必要がなくなる。
       # また、カードリーダーのUSBが物理的に抜けた場合でも、USBを再接続すればコンテナを再起動することなく再認識される。
-      - /var/run/pcscd/pcscd.comm:/var/run/pcscd/pcscd.comm
+      - type: bind
+        source: /var/run/pcscd/pcscd.comm
+        target: /var/run/pcscd/pcscd.comm
+        read_only: true
+        bind:
+          create_host_path: false
     environment:
       TZ: Asia/Tokyo
       DISABLE_PCSCD: "1"
