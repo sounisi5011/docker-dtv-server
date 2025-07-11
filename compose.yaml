@@ -1,5 +1,5 @@
 services:
-  auto_gen_config:
+  prepare_scan_tuners_and_channels:
     image:
       # このコンテナは常にローカルのDockerfileに基づいて作成されるため、コンテナイメージをpullすることはない。
       # しかしimageがなければ、`docker image`コマンドや`docker ps`コマンドでは自動生成されたコンテナイメージ名が使用される。
@@ -64,7 +64,7 @@ services:
       context: ./mirakurun
     container_name: Mirakurun
     depends_on:
-      auto_gen_config:
+      prepare_scan_tuners_and_channels:
         condition: service_completed_successfully
     volumes:
       - ./mirakurun/conf:/app-config
@@ -144,7 +144,7 @@ services:
       context: ./EDCB
     container_name: PrepareEDCB-CreateConfigFiles
     depends_on:
-      auto_gen_config:
+      prepare_scan_tuners_and_channels:
         condition: service_completed_successfully
     volumes:
       - ./EDCB/edcb:/var/local/host_data/edcb
