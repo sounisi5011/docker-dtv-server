@@ -15,8 +15,7 @@ readonly DEST_DIR="${1%/}"
 # Note: 生成された各種iniファイルを確認した限りではUTF-8 LFテキストだったため、おそらくこの書き込み方法で問題はないはず。
 #       とはいえ、EDCBのソースコードを確認できていないため確証はない。
 #       ChSet4.txtとChSet5.txtはUTF-8 with BOM LFであり、iniファイルと同じではない。不安は残る。
-readonly TUNER_COUNT_FILEPATH="${DEST_DIR}/Setting/.tuner_count.txt"
-TUNER_COUNT="$(cat "${TUNER_COUNT_FILEPATH}")"
+TUNER_COUNT="$(/usr/local/bin/get-tuner-count.pl /mirakurun-config/tuners.yml)"
 readonly TUNER_COUNT
 # Countは使用可能なチューナー数、EPGCountは使用可能チューナー数の半分に設定
 # Bashの算術式を用いて、TUNER_COUNTが奇数の場合は1足した数を算出する
@@ -28,8 +27,6 @@ GetEpg=1
 EPGCount=$(( (TUNER_COUNT%2 == 0) ? (TUNER_COUNT/2) : (TUNER_COUNT/2+1) ))
 Priority=0
 END_OF_INI
-# EDCBへの副作用を減らすため、チューナー数記録ファイルを削除
-rm "${TUNER_COUNT_FILEPATH}"
 
 for filename in 'Common.ini' 'EpgDataCap_Bon.ini' 'EpgTimerSrv.ini'; do
   src_filepath="/var/local/edcb/${filename}"

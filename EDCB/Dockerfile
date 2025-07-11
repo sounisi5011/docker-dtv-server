@@ -63,8 +63,9 @@ COPY --from=builder /usr/local/lib/edcb/ /usr/local/lib/edcb/
 COPY --from=builder /var/local/edcb/ /var/local/edcb/
 RUN chmod 777 /var/local/edcb
 
-# setup-ini.shをコピーして実行権限付与
+# setup-ini.shとget-tuner-count.plをコピーして実行権限付与
 COPY --chmod=755 ./setup-ini.sh /usr/local/bin/setup-ini.sh
+COPY --chmod=755 ./get-tuner-count.pl /usr/local/bin/get-tuner-count.pl
 
 # デバッグ用に移動しておく
 WORKDIR /var/local/edcb

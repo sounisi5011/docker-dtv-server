@@ -36,19 +36,10 @@ CHSET5_FILEPATH='/edcb-setting/ChSet5.txt'
 SCAN_RESULT_DIRPATH=./isdb-scanner-result
 readonly CHANNELS_FILEPATH TUNERS_FILEPATH CHSET4_FILEPATH CHSET5_FILEPATH SCAN_RESULT_DIRPATH
 
-# チューナー数を記録する
-# EpgTimerSrv.iniファイルに事前設定値を書き込む際にチューナー数が必要になるので、あらかじめ取得してファイルに保存しておく。
-# Note: EDCBへの副作用を減らすため、このファイルはEpgTimerSrv.iniファイルへの書き込み使用後に削除する。
-#       よって他の設定ファイルとは異なり、作成済みか否かに関わらず常に再作成する。
-save_tuner_count() {
-  < "${TUNERS_FILEPATH}" /usr/local/bin/get-tuner-count.pl > /edcb-setting/.tuner_count.txt
-}
-
 ##### 設定ファイルの存在チェック #####
 # すでに設定ファイルが作成済みである場合は、以降の処理を行わずに終了する
 if [[ -s "${CHANNELS_FILEPATH}" && -s "${TUNERS_FILEPATH}" && -s "${CHSET4_FILEPATH}" && -s "${CHSET5_FILEPATH}" ]]; then
   echo 'All configuration files have been created'
-  save_tuner_count
   exit 0
 fi
 
@@ -63,8 +54,6 @@ cp "${SCAN_RESULT_DIRPATH}/Mirakurun/channels.yml" "${CHANNELS_FILEPATH}"
 cp "${SCAN_RESULT_DIRPATH}/Mirakurun/tuners.yml"   "${TUNERS_FILEPATH}"
 
 ##### EDCB用の設定ファイルを作成 #####
-
-save_tuner_count
 
 # ChSet5.txtを作成する
 # Note: Linux版EDCBのChSet5.txtは改行コードがLFである一方、

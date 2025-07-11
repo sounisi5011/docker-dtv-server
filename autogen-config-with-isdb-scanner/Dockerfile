@@ -21,7 +21,5 @@ RUN wget --no-verbose https://github.com/tsukumijima/ISDBScanner/releases/downlo
 
 # entrypoint.shをコンテナ内にコピー
 COPY --chmod=755 ./entrypoint.sh /usr/local/bin/entrypoint.sh
-# get-tuner-count.plをコンテナ内にコピー
-COPY --chmod=755 ./get-tuner-count.pl /usr/local/bin/get-tuner-count.pl
 
 CMD [ "/usr/local/bin/entrypoint.sh" ]
