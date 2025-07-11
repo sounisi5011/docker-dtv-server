@@ -170,8 +170,20 @@ services:
       - ./EDCB/edcb/Common.ini:/var/local/edcb/Common.ini
       - ./EDCB/edcb/EpgDataCap_Bon.ini:/var/local/edcb/EpgDataCap_Bon.ini
       - ./EDCB/edcb/EpgTimerSrv.ini:/var/local/edcb/EpgTimerSrv.ini
+      - ./EDCB/edcb/EpgTimerSrvDebugLog.txt:/var/local/edcb/EpgTimerSrvDebugLog.txt
+      - ./EDCB/edcb/EpgTimerSrvNotify.log:/var/local/edcb/EpgTimerSrvNotify.log
       - ./EDCB/edcb/Setting:/var/local/edcb/Setting
       - ${DTV_RECORD_DIR_PATH:-./EDCB/record}:/record
+      # ファイル名変換PlugInの設定ファイル
+      # Note: もし /usr/local/lib/edcb ディレクトリ内に RecName*.so ファイルを追加配置する場合は、
+      #       対応する設定ファイルのパスもここに記載しマウントすること。
+      #       EDCB/setup-ini.sh の更新も忘れずに。
+      - ./EDCB/edcb/RecName_Macro.so.ini:/var/local/edcb/RecName_Macro.so.ini
+      # 出力PlugInの設定ファイル
+      # Note: もし /usr/local/lib/edcb ディレクトリ内に Write*.so ファイルを追加配置する場合は、
+      #       対応する設定ファイルのパスもここに記載しマウントすること。
+      #       EDCB/setup-ini.sh の更新も忘れずに。
+      - ./EDCB/edcb/Write_Default.so.ini:/var/local/edcb/Write_Default.so.ini
     network_mode: host
     restart: always
     logging:

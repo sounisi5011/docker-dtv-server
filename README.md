@@ -29,6 +29,7 @@ Dockerで構築する[Mirakurun] + [EDCB]構成のTV録画環境
     - `HttpAccessControlList`に`+192.168.0.0/16`を追記
     - 実際に検出したチューナー数に基づき、`BonDriver_LinuxMirakc`を利用するための設定を追記
 - [EDCB]の録画保存先ディレクトリを環境変数`DTV_RECORD_DIR_PATH`で定義できるように変更
+- 情報通知ログ、デバッグ出力ログ、同梱プラグインの設定ファイルもホスト側の`./EDCB/edcb`内にマウントするように変更
 - コンテナ起動時の[EDCB]のチャンネルスキャン実行を削除（[ISDBScanner]が生成するため不要と判断）
 - [EDCB]のビルドに使用するベースイメージを`buildpack-deps:bookworm`に変更（Build Cacheの削減）
 - [EDCB]のランタイム依存関係から`ffmpeg`と`ca-certificates`を削除
@@ -86,6 +87,48 @@ docker compose up -d
     ```bash
     DTV_RECORD_DIR_PATH=/mnt/sda1/record docker compose up -d
     ```
+
+## ファイル名変換PlugIn および 出力PlugIn の設定に関わる注意事項
+
+EDCBは`/usr/local/lib/edcb`ディレクトリ直下に置かれた2種類のプラグインファイルを認識する。
+
++ ファイル名変換PlugIn（`RecName*.so`ファイルを自動で認識）
++ 出力PlugIn（`Write*.so`ファイルを自動で認識）
+
+各プラグインに対して設定を書き込むと、EDCBは`/var/local/edcb/`ディレクトリ内に`{プラグインファイル名}.ini`という名称の設定ファイルを作成する。
+
++ `RecName_Macro.so` → `RecName_Macro.so.ini`
++ `Write_Default.so` → `Write_Default.so.ini`
+
+もし、`/usr/local/lib/edcb`ディレクトリ内に追加のプラグインを導入する場合は、`compose.yaml`のedcbサービスのボリューム設定を変更すること。
+
+```yaml
+...
+      # ファイル名変換PlugInの設定ファイル
+      # Note: もし /usr/local/lib/edcb ディレクトリ内に RecName*.so ファイルを追加配置する場合は、
+      #       対応する設定ファイルのパスもここに記載しマウントすること。
+      #       EDCB/setup-ini.sh の更新も忘れずに。
+      - ./EDCB/edcb/RecName_Macro.so.ini:/var/local/edcb/RecName_Macro.so.ini
+      # 出力PlugInの設定ファイル
+      # Note: もし /usr/local/lib/edcb ディレクトリ内に Write*.so ファイルを追加配置する場合は、
+      #       対応する設定ファイルのパスもここに記載しマウントすること。
+      #       EDCB/setup-ini.sh の更新も忘れずに。
+      - ./EDCB/edcb/Write_Default.so.ini:/var/local/edcb/Write_Default.so.ini
+```
+
+また、対応する設定ファイルを（空の内容で良いので）事前に作成するか、もしくは`EDCB/setup-ini.sh`を編集して自動作成するように変更すること。
+
+```bash
+...
+for filename in 'Common.ini' 'EpgDataCap_Bon.ini' 'EpgTimerSrv.ini' \
+    'EpgTimerSrvDebugLog.txt' 'EpgTimerSrvNotify.log' \
+    'RecName_Macro.so.ini' \
+    'Write_Default.so.ini' \
+; do
+...
+```
+
+変更しなければ、コンテナを終了するたびにプラグインの設定が消滅してしまうので注意。
 
 ## ライセンス
 

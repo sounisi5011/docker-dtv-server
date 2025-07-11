@@ -8,7 +8,11 @@ set -euo pipefail
 
 readonly DEST_DIR="${1%/}"
 
-for filename in 'Common.ini' 'EpgDataCap_Bon.ini' 'EpgTimerSrv.ini'; do
+for filename in 'Common.ini' 'EpgDataCap_Bon.ini' 'EpgTimerSrv.ini' \
+    'EpgTimerSrvDebugLog.txt' 'EpgTimerSrvNotify.log' \
+    'RecName_Macro.so.ini' \
+    'Write_Default.so.ini' \
+; do
   src_filepath="/var/local/edcb/${filename}"
   dest_filepath="${DEST_DIR}/${filename}"
 
