@@ -6,7 +6,7 @@ services:
       # よって、pull_policyでpullを禁止しつつ、imageも併用する。
       isdb-scanner
     build:
-      context: ./autogen-config-with-isdb-scanner
+      context: ./scan-tuners-and-channels
     container_name: PrepareDTV-ScanTunersAndChannels
     volumes:
       # ホストのpcscdを使う。これにより、ホストのpcscd.socketを止める必要がなくなる。
