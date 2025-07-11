@@ -27,9 +27,9 @@ Dockerで構築する[Mirakurun] + [EDCB]構成のTV録画環境
 - [recpt1](https://github.com/stz2012/recpt1)および[libaribb25](https://github.com/tsukumijima/libaribb25)の代わりに[recisdb]を使用
 - Dockerのログを[`json-file`](https://docs.docker.com/engine/logging/drivers/json-file/)の代わりに[`journald`](https://docs.docker.com/engine/logging/drivers/journald/)を使って書き込む
 - 初回起動時に[ISDBScanner]や自動起動コンテナを使用して[Mirakurun]および[EDCB]の設定ファイルを自動生成
-  - `Common.ini`  
+  - `./EDCB/edcb/Common.ini`  
     `/record`を録画保存フォルダとして使用する設定で作成
-  - `EpgTimerSrv.ini`
+  - `./EDCB/edcb/EpgTimerSrv.ini`
     - `HttpAccessControlList`に`+192.168.0.0/16`を追記
     - 実際に検出したチューナー数に基づき、`BonDriver_LinuxMirakc`を利用するための設定を追記
 - [EDCB]の録画保存先ディレクトリを環境変数`DTV_RECORD_DIR_PATH`で定義できるように変更
@@ -71,7 +71,7 @@ docker compose up -d
 
 最初にチューナー・チャンネルスキャン用のコンテナが立ち上がり、続いてMirakurun、EDCB設定ファイル事前作成用のコンテナ、最後にEDCBが立ち上がる。チューナースキャンとチャンネルスキャンには7分前後かかるため、完了するまで待ってからEDCBにアクセスする。
 
-デフォルトの録画保存先ディレクトリは`EDCB/record`。環境変数`DTV_RECORD_DIR_PATH`を指定することで変更することができる。
+デフォルトの録画保存先ディレクトリは`./EDCB/record`。環境変数`DTV_RECORD_DIR_PATH`を指定することで変更することができる。
 以下のいずれかの方法を選択（方法2は方法1の設定を上書きする）：
 
 1. `.env`ファイルを`compose.yaml`と同じ階層に作成。
@@ -95,12 +95,12 @@ docker compose up -d
 ## ファイル名変換PlugIn および 出力PlugIn の設定に関わる注意事項
 
 > [!NOTE]
-> とくに明記しない限り、以下の説明にある`/usr/local/lib/edcb`や`/var/local/edcb/`はEDCBのコンテナ内のファイルパスである点に注意。
-> ホストのラズパイにsshで入った状態で`/usr/local/lib/edcb`や`/var/local/edcb/`を確認しても何も無い。
+> とくに明記しない限り、以下の説明にある`/usr/local/lib/edcb/`や`/var/local/edcb/`はEDCBのコンテナ内のファイルパスである点に注意。
+> ホストのラズパイにsshで入った状態で`/usr/local/lib/edcb/`や`/var/local/edcb/`を確認しても何も無い。
 >
 > もし直接確認する必要がある場合は、コンテナ起動後に`docker exec -it EDCB /bin/bash`コマンドでEDCBのコンテナ内のシェルに入ったり、`docker cp`コマンドでホスト↔コンテナ間でファイルをコピーすること。
 
-EDCBは`/usr/local/lib/edcb`ディレクトリ直下に置かれた2種類のプラグインファイルを認識する。
+EDCBは`/usr/local/lib/edcb/`ディレクトリ直下に置かれた2種類のプラグインファイルを認識する。
 
 + ファイル名変換PlugIn（`RecName*.so`ファイルを自動で認識）
 + 出力PlugIn（`Write*.so`ファイルを自動で認識）
@@ -110,7 +110,7 @@ EDCBは`/usr/local/lib/edcb`ディレクトリ直下に置かれた2種類のプ
 + `RecName_Macro.so` → `RecName_Macro.so.ini`
 + `Write_Default.so` → `Write_Default.so.ini`
 
-もし、`/usr/local/lib/edcb`ディレクトリ内に追加のプラグインを導入する場合は、`compose.yaml`のedcbサービスのボリューム設定を変更すること。
+もし、`/usr/local/lib/edcb/`ディレクトリ内に追加のプラグインを導入する場合は、`./compose.yaml`のedcbサービスのボリューム設定を変更すること。
 
 ```yaml
 ...
@@ -127,7 +127,7 @@ EDCBは`/usr/local/lib/edcb`ディレクトリ直下に置かれた2種類のプ
 ...
 ```
 
-また、対応する設定ファイルを（空の内容で良いので）事前に作成するか、もしくは`EDCB/setup-ini.sh`を編集して自動作成するように変更すること。
+また、対応する設定ファイルを（空の内容で良いので）事前に作成するか、もしくは`./EDCB/setup-ini.sh`を編集して自動作成するように変更すること。
 
 ```bash
 ...
@@ -160,7 +160,7 @@ for filename in 'Common.ini' 'EpgDataCap_Bon.ini' 'EpgTimerSrv.ini' \
 > docker compose run edcb_create_config
 > ```
 
-### `EDCB/edcb/EpgTimerSrv.ini`
+### `./EDCB/edcb/EpgTimerSrv.ini`
 
 `SaveNotifyLog=1`、`SaveDebugLog=1`、あとはRecName_Macroを使用するための設定をオススメする。
 
@@ -189,7 +189,7 @@ EPGCount=2
 Priority=0
 ```
 
-### `RecName_Macro.so.ini`
+### `./EDCB/edcb/RecName_Macro.so.ini`
 
 ファイル名変換PlugInの`RecName_Macro.so`（Windows版EDCBにおける`RecName_Macro.dll`）を使ってどのような録画ファイル名にするかの設定。
 個人的には`20XX-11-21-01-28.放送局名半角英数.[新]番組名半角英数[字][デ].ts`書式を使っている。
