@@ -1,8 +1,13 @@
 services:
-  auto_gen_config:
-    container_name: auto-gen-config.ISDBScanner
+  prepare_scan_tuners_and_channels:
+    image:
+      # このコンテナは常にローカルのDockerfileに基づいて作成されるため、コンテナイメージをpullすることはない。
+      # しかしimageがなければ、`docker image`コマンドや`docker ps`コマンドでは自動生成されたコンテナイメージ名が使用される。
+      # よって、pull_policyでpullを禁止しつつ、imageも併用する。
+      isdb-scanner
     build:
-      context: ./autogen-config-with-isdb-scanner
+      context: ./scan-tuners-and-channels
+    container_name: PrepareDTV-ScanTunersAndChannels
     volumes:
       # ホストのpcscdを使う。これにより、ホストのpcscd.socketを止める必要がなくなる。
       # また、カードリーダーのUSBが物理的に抜けた場合でも、USBを再接続すればコンテナを再起動することなく再認識される。
@@ -15,6 +20,14 @@ services:
       # MirakurunおよびEDCBの設定ファイル格納ディレクトリをマウント
       - ./mirakurun/conf:/mirakurun-config
       - ./EDCB/edcb/Setting:/edcb-setting
+    logging:
+      # ログはjournaldで記録する
+      # デフォルトのjson-fileはログが /var/lib/docker/containers/*/*-json.log ファイルに記録される一方、
+      # journaldの場合はログが /var/log/ 以下に集約されるため、
+      # log2ramやzram-configのような書き込み頻度を抑えてSDカードの寿命を伸ばすソフトウェアが使用しやすい。
+      driver: journald
+      options:
+        tag: dtv-prepare-scan-tuners-and-channels
     devices:
       # /dev/bus は必須。これがなければチューナーが認識されない
       - /dev/bus:/dev/bus
@@ -27,17 +40,12 @@ services:
       - /dev/px4video5
       - /dev/px4video6
       - /dev/px4video7
-    logging:
-      # ログはjournaldで記録する
-      # デフォルトのjson-fileはログが /var/lib/docker/containers/*/*-json.log ファイルに記録される一方、
-      # journaldの場合はログが /var/log/ 以下に集約されるため、
-      # log2ramやzram-configのような書き込み頻度を抑えてSDカードの寿命を伸ばすソフトウェアが使用しやすい。
-      driver: journald
-      options:
-        tag: dtv-autogen-config
     # いわゆるPID1問題を回避するため、Tiniを使用する
     # see https://zenn.dev/sato_frontend/articles/fc49ffb2fe5dfc
     init: true
+    # このコンテナは常にローカルのDockerfileに基づいて作成されるため、
+    # コンテナイメージのpullを常に許可しない。
+    pull_policy: never
 
   # Note: Mirakurun公式の環境構築手順では、インストール時に `docker compose run --rm -e SETUP=true mirakurun` コマンドを実行している
   #       see https://github.com/Chinachu/Mirakurun/blob/61c4155d2535c56fbf6fd379c5e8aba779fd642b/doc/Platforms.ja.md#%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB--%E3%82%A2%E3%83%B3%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB--%E3%82%A2%E3%83%83%E3%83%97%E3%83%87%E3%83%BC%E3%83%88
@@ -56,7 +64,7 @@ services:
       context: ./mirakurun
     container_name: Mirakurun
     depends_on:
-      auto_gen_config:
+      prepare_scan_tuners_and_channels:
         condition: service_completed_successfully
     volumes:
       - ./mirakurun/conf:/app-config
@@ -136,7 +144,7 @@ services:
       context: ./EDCB
     container_name: PrepareEDCB-CreateConfigFiles
     depends_on:
-      auto_gen_config:
+      prepare_scan_tuners_and_channels:
         condition: service_completed_successfully
     volumes:
       - ./EDCB/edcb:/var/local/host_data/edcb
