@@ -1,8 +1,8 @@
 services:
   auto_gen_config:
-    container_name: auto-gen-config.ISDBScanner
     build:
       context: ./autogen-config-with-isdb-scanner
+    container_name: auto-gen-config.ISDBScanner
     volumes:
       # ホストのpcscdを使う。これにより、ホストのpcscd.socketを止める必要がなくなる。
       # また、カードリーダーのUSBが物理的に抜けた場合でも、USBを再接続すればコンテナを再起動することなく再認識される。
@@ -15,6 +15,14 @@ services:
       # MirakurunおよびEDCBの設定ファイル格納ディレクトリをマウント
       - ./mirakurun/conf:/mirakurun-config
       - ./EDCB/edcb/Setting:/edcb-setting
+    logging:
+      # ログはjournaldで記録する
+      # デフォルトのjson-fileはログが /var/lib/docker/containers/*/*-json.log ファイルに記録される一方、
+      # journaldの場合はログが /var/log/ 以下に集約されるため、
+      # log2ramやzram-configのような書き込み頻度を抑えてSDカードの寿命を伸ばすソフトウェアが使用しやすい。
+      driver: journald
+      options:
+        tag: dtv-autogen-config
     devices:
       # /dev/bus は必須。これがなければチューナーが認識されない
       - /dev/bus:/dev/bus
@@ -27,14 +35,6 @@ services:
       - /dev/px4video5
       - /dev/px4video6
       - /dev/px4video7
-    logging:
-      # ログはjournaldで記録する
-      # デフォルトのjson-fileはログが /var/lib/docker/containers/*/*-json.log ファイルに記録される一方、
-      # journaldの場合はログが /var/log/ 以下に集約されるため、
-      # log2ramやzram-configのような書き込み頻度を抑えてSDカードの寿命を伸ばすソフトウェアが使用しやすい。
-      driver: journald
-      options:
-        tag: dtv-autogen-config
     # いわゆるPID1問題を回避するため、Tiniを使用する
     # see https://zenn.dev/sato_frontend/articles/fc49ffb2fe5dfc
     init: true
