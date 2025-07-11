@@ -129,13 +129,32 @@ Mirakurunの設定ファイルやデータファイルは`./mirakurun/`ディレ
 git ls-files -oi --exclude-standard
 ```
 
+なお、EDCBは`/var/local/edcb/`ディレクトリ内の特定の設定ファイルやログファイルを個別にマウントしている関係上、一部のファイルは上記コマンドでは確認できない。  
+（`/var/local/edcb/HttpAccess.log`、新しく導入したプラグインによって生成された未知の設定ファイル、など）
+
+確認したい場合は、`docker diff`コマンドを使って新規作成・更新されたファイルの一覧を確認し、
+
+```bash
+docker diff EDCB
+# Mirakurunの場合は`docker diff Mirakurun`
+```
+
+必要に応じて、`docker exec`コマンドなどで内部から確認する。
+
+```bash
+# EDCBのコンテナ内でBashを起動して入る
+docker exec -it EDCB bash
+# EDCBのコンテナ内でlsを実行する
+docker exec EDCB ls -lhpa /var/local/edcb/
+```
+
 ## ファイル名変換PlugIn および 出力PlugIn の設定に関わる注意事項
 
 > [!NOTE]
 > とくに明記しない限り、以下の説明にある`/usr/local/lib/edcb/`や`/var/local/edcb/`はEDCBのコンテナ内のファイルパスである点に注意。
 > ホストのラズパイにsshで入った状態で`/usr/local/lib/edcb/`や`/var/local/edcb/`を確認しても何も無い。
 >
-> もし直接確認する必要がある場合は、コンテナ起動後に`docker exec -it EDCB /bin/bash`コマンドでEDCBのコンテナ内のシェルに入ったり、`docker cp`コマンドでホスト↔コンテナ間でファイルをコピーすること。
+> もし直接確認する必要がある場合は、コンテナ起動後に`docker exec -it EDCB bash`コマンドでEDCBのコンテナ内のシェルに入ったり、`docker cp`コマンドでホスト↔コンテナ間でファイルをコピーすること。
 
 EDCBは`/usr/local/lib/edcb/`ディレクトリ直下に置かれた2種類のプラグインファイルを認識する。
 
