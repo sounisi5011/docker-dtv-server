@@ -113,54 +113,87 @@ services:
     tmpfs:
       - /tmp
 
-  edcb_chscan:
-    image: edcb
-    container_name: EDCB_ChScan
+  # EDCBの設定ファイルを作成し、ホストのディレクトリに書き込む
+  # Note: 宛先パスが存在しない場合、Dockerはマウント時にファイルがあるべきパスにディレクトリを作成してしまう。
+  #       この挙動を回避するため、ホストとコンテナで共有するべき設定ファイルを予めホスト側に作成しておく。
+  edcb_create_config:
+    image:
+      # このコンテナは常にローカルのDockerfileに基づいて作成されるため、コンテナイメージをpullすることはない。
+      # しかしimageがなければ、`docker image`コマンドや`docker ps`コマンドでは自動生成されたコンテナイメージ名が使用される。
+      # よって、pull_policyでpullを禁止しつつ、imageも併用する。
+      edcb:prepare.create-config
     build:
       context: ./EDCB
+    container_name: PrepareEDCB-CreateConfigFiles
     depends_on:
-      - mirakurun
-    network_mode: host
+      auto_gen_config:
+        condition: service_completed_successfully
     volumes:
-      - type: bind
-        source: "./EDCB/edcb/Common.ini"
-        target: "/var/local/edcb/Common.ini"
-      - type: bind
-        source: "./EDCB/edcb/EpgDataCap_Bon.ini"
-        target: "/var/local/edcb/EpgDataCap_Bon.ini"
-      - type: bind
-        source: "./EDCB/edcb/EpgTimerSrv.ini"
-        target: "/var/local/edcb/EpgTimerSrv.ini"
-      - type: bind
-        source: "./EDCB/edcb/Setting"
-        target: "/var/local/edcb/Setting"
+      - ./EDCB/edcb:/var/local/host_data/edcb
+      # チューナー数を取得するため、Mirakurunの設定ファイル格納ディレクトリもマウントする
+      # 書き込みは行わないため、ACCESS_MODEで`ro`（Read-only access）を指定。
+      - ./mirakurun/conf:/mirakurun-config:ro
+    # /var/local/edcb/ディレクトリ内から/var/local/host_data/edcbディレクトリへ設定ファイルをコピーする
+    # Note: コンテナ内の/var/local/edcb/ディレクトリには他の設定ファイルも含まれているが、ホストと共有するのは一部のみ。
+    #       よって/var/local/edcb/ディレクトリそのものをホストと共有することはできない。
+    #       そのため、一旦ホスト側のディレクトリを別の場所（/var/local/host_data/edcb）にマウントし、
+    #       そこへ/var/local/edcb/から設定ファイルをコピーすることで
+    #       必要な設定ファイルのみをホスト側に作成する。
+    command: /usr/local/bin/setup-ini.sh /var/local/host_data/edcb
+    logging:
+      # ログはjournaldで記録する
+      # デフォルトのjson-fileはログが /var/lib/docker/containers/*/*-json.log ファイルに記録される一方、
+      # journaldの場合はログが /var/log/ 以下に集約されるため、
+      # log2ramやzram-configのような書き込み頻度を抑えてSDカードの寿命を伸ばすソフトウェアが使用しやすい。
+      driver: journald
+      options:
+        tag: dtv-prepare-edcb-create-config
+    # このコンテナは常にローカルのDockerfileに基づいて作成されるため、
+    # コンテナイメージのpullを常に許可しない。
+    pull_policy: never
 
   edcb:
-    image: edcb
-    container_name: EDCB
+    image:
+      # このコンテナは常にローカルのDockerfileに基づいて作成されるため、コンテナイメージをpullすることはない。
+      # しかしimageがなければ、`docker image`コマンドや`docker ps`コマンドでは自動生成されたコンテナイメージ名が使用される。
+      # よって、pull_policyでpullを禁止しつつ、imageも併用する。
+      edcb
     build:
       context: ./EDCB
+    container_name: EDCB
     depends_on:
+      edcb_create_config:
+        condition: service_completed_successfully
       mirakurun:
         condition: service_started
-      edcb_chscan:
-        condition: service_completed_successfully
-    restart: always
-    network_mode: host
-    command: /usr/local/bin/EpgTimerSrv
     volumes:
-      - type: bind
-        source: "./EDCB/edcb/Common.ini"
-        target: "/var/local/edcb/Common.ini"
-      - type: bind
-        source: "./EDCB/edcb/EpgDataCap_Bon.ini"
-        target: "/var/local/edcb/EpgDataCap_Bon.ini"
-      - type: bind
-        source: "./EDCB/edcb/EpgTimerSrv.ini"
-        target: "/var/local/edcb/EpgTimerSrv.ini"
-      - type: bind
-        source: "./EDCB/edcb/Setting"
-        target: "/var/local/edcb/Setting"
-      - type: bind
-        source: "./EDCB/record"
-        target: "/record"
+      - ./EDCB/edcb/Common.ini:/var/local/edcb/Common.ini
+      - ./EDCB/edcb/EpgDataCap_Bon.ini:/var/local/edcb/EpgDataCap_Bon.ini
+      - ./EDCB/edcb/EpgTimerSrv.ini:/var/local/edcb/EpgTimerSrv.ini
+      - ./EDCB/edcb/EpgTimerSrvDebugLog.txt:/var/local/edcb/EpgTimerSrvDebugLog.txt
+      - ./EDCB/edcb/EpgTimerSrvNotify.log:/var/local/edcb/EpgTimerSrvNotify.log
+      - ./EDCB/edcb/Setting:/var/local/edcb/Setting
+      - ${DTV_RECORD_DIR_PATH:-./EDCB/record}:/record
+      # ファイル名変換PlugInの設定ファイル
+      # Note: もし /usr/local/lib/edcb ディレクトリ内に RecName*.so ファイルを追加配置する場合は、
+      #       対応する設定ファイルのパスもここに記載しマウントすること。
+      #       EDCB/setup-ini.sh の更新も忘れずに。
+      - ./EDCB/edcb/RecName_Macro.so.ini:/var/local/edcb/RecName_Macro.so.ini
+      # 出力PlugInの設定ファイル
+      # Note: もし /usr/local/lib/edcb ディレクトリ内に Write*.so ファイルを追加配置する場合は、
+      #       対応する設定ファイルのパスもここに記載しマウントすること。
+      #       EDCB/setup-ini.sh の更新も忘れずに。
+      - ./EDCB/edcb/Write_Default.so.ini:/var/local/edcb/Write_Default.so.ini
+    network_mode: host
+    restart: always
+    logging:
+      # ログはjournaldで記録する
+      # デフォルトのjson-fileはログが /var/lib/docker/containers/*/*-json.log ファイルに記録される一方、
+      # journaldの場合はログが /var/log/ 以下に集約されるため、
+      # log2ramやzram-configのような書き込み頻度を抑えてSDカードの寿命を伸ばすソフトウェアが使用しやすい。
+      driver: journald
+      options:
+        tag: dtv-edcb
+    # このコンテナは常にローカルのDockerfileに基づいて作成されるため、
+    # コンテナイメージのpullを常に許可しない。
+    pull_policy: never
