@@ -121,7 +121,7 @@ services:
       # このコンテナは常にローカルのDockerfileに基づいて作成されるため、コンテナイメージをpullすることはない。
       # しかしimageがなければ、`docker image`コマンドや`docker ps`コマンドでは自動生成されたコンテナイメージ名が使用される。
       # よって、pull_policyでpullを禁止しつつ、imageも併用する。
-      edcb
+      edcb:prepare.create-config
     build:
       context: ./EDCB
     container_name: PrepareEDCB-CreateConfigFiles
