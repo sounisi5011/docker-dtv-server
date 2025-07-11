@@ -27,7 +27,7 @@ services:
       # log2ramやzram-configのような書き込み頻度を抑えてSDカードの寿命を伸ばすソフトウェアが使用しやすい。
       driver: journald
       options:
-        tag: dtv-autogen-config
+        tag: dtv-prepare-scan-tuners-and-channels
     devices:
       # /dev/bus は必須。これがなければチューナーが認識されない
       - /dev/bus:/dev/bus
