@@ -94,6 +94,12 @@ docker compose up -d
 
 ## ファイル名変換PlugIn および 出力PlugIn の設定に関わる注意事項
 
+> [!NOTE]
+> とくに明記しない限り、以下の説明にある`/usr/local/lib/edcb`や`/var/local/edcb/`はEDCBのコンテナ内のファイルパスである点に注意。
+> ホストのラズパイにsshで入った状態で`/usr/local/lib/edcb`や`/var/local/edcb/`を確認しても何も無い。
+>
+> もし直接確認する必要がある場合は、コンテナ起動後に`docker exec -it EDCB /bin/bash`コマンドでEDCBのコンテナ内のシェルに入ったり、`docker cp`コマンドでホスト↔コンテナ間でファイルをコピーすること。
+
 EDCBは`/usr/local/lib/edcb`ディレクトリ直下に置かれた2種類のプラグインファイルを認識する。
 
 + ファイル名変換PlugIn（`RecName*.so`ファイルを自動で認識）
