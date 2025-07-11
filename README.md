@@ -12,7 +12,11 @@ Dockerで構築する[Mirakurun] + [EDCB]構成のTV録画環境
 
 [fork元]: https://github.com/nunawa/docker-dtv-server
 
-本構成では、録画した`.m2ts`ファイルのエンコード処理などは **一切行わない想定** である点に注意。録画した大容量の`.m2ts`ファイルはNASなどに転送し、別途用意した端末にて[VLCメディアプレイヤー][VLC]で再生する。
+本構成では、リアルタイム視聴および録画した番組の再生に必要なエンコード処理などは **一切行わない想定** である点に注意。前述したとおり録画機能のみに特化しており、サーバ単体ではライブ視聴もできない。
+
+録画した大容量の`.ts`ファイルはNASなどに転送し、別途用意した端末にて[VLCメディアプレイヤー][VLC]で再生する。
+
+リアルタイム視聴は[Mirakurun]の`/api/channels/{type}/{channel}/services/{id}/stream`や`/api/services/{id}/stream`から[VLCメディアプレイヤー][VLC]で観ることができる。しかし[EDCB]を経由しない方法なので非推奨。チューナーを確保できず録画が失敗する可能性がある（未検証）。
 
 [KonomiTV]: https://github.com/tsukumijima/KonomiTV
 [VLC]: https://www.videolan.org/vlc/
